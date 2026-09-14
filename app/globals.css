@@ -1,0 +1,144 @@
+@import "tailwindcss";
+
+/*
+  Sistema de diseño · Ana Cure Estética & Spa
+  ------------------------------------------------------------
+  Los cuatro colores de marca salen tal cual del kit (04_Paleta_de_Color).
+  Los tonos derivados (lila, menta, tinta, gris, noche) se calcularon
+  mezclando esos mismos colores con blanco o negro en el espacio OKLab.
+  No hay ningún color inventado: cada derivado indica su fórmula.
+*/
+@theme {
+  /* Marca (kit, exactos) */
+  --color-purpura: #8323AB;   /* Púrpura Ana Cure · principal */
+  --color-verde: #147B80;     /* Verde azulado · descriptor y hojas */
+  --color-indigo: #252474;    /* Índigo · solape de hojas */
+  --color-ciruela: #561D87;   /* Ciruela · puntos del isotipo · hover del púrpura */
+  --color-blanco: #FFFFFF;
+  --color-negro: #000000;
+
+  /* Derivados del púrpura con blanco (fondos y tintes) */
+  --color-lila-50: #FAF7FC;   /* 4 %  púrpura */
+  --color-lila-100: #F5EEF9;  /* 8 %  */
+  --color-lila-200: #EBDDF3;  /* 16 % */
+  --color-lila-300: #DAC0E8;  /* 30 % */
+  --color-lila-400: #C197D8;  /* 50 % */
+
+  /* Derivados del verde con blanco */
+  --color-menta-50: #F4F8F8;  /* 5 %  verde */
+  --color-menta-100: #E9F1F2; /* 10 % */
+  --color-menta-200: #D4E4E5; /* 20 % */
+  --color-verde-oscuro: #0B565A; /* verde 78 % + negro · hover del verde */
+
+  /* Neutros derivados del índigo (texto, líneas, fondos oscuros) */
+  --color-tinta: #0A0A30;       /* índigo 55 % + negro · texto principal */
+  --color-tinta-suave: #100F3E; /* índigo 65 % + negro */
+  --color-gris: #606791;        /* texto secundario · contraste 5,5:1 sobre blanco */
+  --color-gris-claro: #9DA2BD;  /* decorativo, nunca para texto pequeño */
+  --color-linea: #E1E3EF;       /* bordes */
+  --color-noche: #0A0A30;       /* fondo oscuro (pie, cierres) */
+  --color-noche-ciruela: #170429; /* ciruela 45 % + negro · veladuras sobre foto */
+
+  /* Tipografía */
+  --font-display: var(--font-cinzel), "Cinzel", Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-inter), "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --text-display-xl: clamp(2.125rem, 1.35rem + 3.4vw, 4.25rem);
+  --text-display-xl--line-height: 1.08;
+  --text-display-xl--letter-spacing: 0.04em;
+  --text-display-lg: clamp(1.75rem, 1.2rem + 2.2vw, 3rem);
+  --text-display-lg--line-height: 1.12;
+  --text-display-lg--letter-spacing: 0.05em;
+  --text-display-md: clamp(1.375rem, 1.1rem + 1.1vw, 1.9rem);
+  --text-display-md--line-height: 1.2;
+  --text-display-md--letter-spacing: 0.06em;
+  --text-display-sm: 1.0625rem;
+  --text-display-sm--line-height: 1.35;
+  --text-display-sm--letter-spacing: 0.08em;
+  --text-eyebrow: 0.72rem;
+  --text-eyebrow--line-height: 1.2;
+  --text-eyebrow--letter-spacing: 0.24em;
+  --text-lead: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+  --text-lead--line-height: 1.6;
+
+  /* Ritmo */
+  --spacing-section: clamp(4rem, 9vw, 8rem);
+  --container-site: 76rem;
+
+  /* Forma */
+  --radius-card: 1.5rem;
+  --radius-pill: 9999px;
+
+  /* Sombra con tinte índigo (nunca negra pura) */
+  --shadow-soft: 0 12px 32px -14px rgb(37 36 116 / 0.22);
+  --shadow-float: 0 18px 44px -16px rgb(86 29 135 / 0.35);
+
+  /* Movimiento */
+  --ease-luxe: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+  body {
+    background-color: var(--color-lila-50);
+    color: var(--color-tinta);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  @media (min-width: 64rem) {
+    body { font-size: 1.0625rem; }
+  }
+  ::selection {
+    background-color: var(--color-purpura);
+    color: var(--color-blanco);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-purpura);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+    font-weight: 600;
+  }
+  p { text-wrap: pretty; }
+  img, svg, video { display: block; max-width: 100%; height: auto; }
+  button, [role="button"] { cursor: pointer; }
+  dialog::backdrop {
+    background: rgb(10 10 48 / 0.55);
+    backdrop-filter: blur(4px);
+  }
+}
+
+@layer utilities {
+  /* Titulares de marca: Cinzel en mayúsculas (regla del manual) */
+  .titular {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  /* Área de contenido legible */
+  .prosa { max-width: 65ch; }
+  /* Oculta visualmente, deja accesible */
+  .sr-only-focusable:not(:focus):not(:focus-within) {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  }
+}
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}

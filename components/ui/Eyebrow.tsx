@@ -1,0 +1,11 @@
+import { cn } from "@/lib/cn";
+
+/** Antetítulo pequeño en Cinzel con tracking amplio. */
+export function Eyebrow({ className, children, tono = "verde" }: { className?: string; children: React.ReactNode; tono?: "verde" | "purpura" | "claro" }) {
+  const color = tono === "verde" ? "text-verde" : tono === "purpura" ? "text-purpura" : "text-lila-300";
+  return (
+    <p className={cn("titular text-eyebrow", color, className)}>
+      {children}
+    </p>
+  );
+}
