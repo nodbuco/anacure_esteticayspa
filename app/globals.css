@@ -142,3 +142,75 @@
   from { opacity: 0; transform: translateY(10px) scale(0.98); }
   to { opacity: 1; transform: none; }
 }
+
+/* ---------- Vidrio (glassmorphism) ---------- */
+@layer utilities {
+  .glass {
+    background: color-mix(in oklab, var(--color-blanco) 58%, transparent);
+    border: 1px solid color-mix(in oklab, var(--color-blanco) 75%, transparent);
+    box-shadow: var(--shadow-soft), inset 0 1px 0 color-mix(in oklab, var(--color-blanco) 80%, transparent);
+    -webkit-backdrop-filter: blur(18px) saturate(1.35);
+    backdrop-filter: blur(18px) saturate(1.35);
+  }
+  .glass-oscuro {
+    background: rgb(10 10 48 / 0.42);
+    border: 1px solid rgb(255 255 255 / 0.22);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.18);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    backdrop-filter: blur(16px) saturate(1.2);
+  }
+  .glass-chip {
+    background: color-mix(in oklab, var(--color-blanco) 55%, transparent);
+    border: 1px solid color-mix(in oklab, var(--color-blanco) 80%, transparent);
+    border-radius: var(--radius-pill);
+    padding: 0.4rem 0.9rem 0.4rem 0.75rem;
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+}
+
+/* ---------- Fondo 2D de flores: deriva con el scroll, sin JavaScript ---------- */
+.flor-2d {
+  left: var(--x-m);
+  top: var(--y-m);
+  transform: rotate(var(--rot, 0deg));
+  will-change: transform;
+}
+@media (min-width: 64rem) {
+  .flor-2d {
+    left: var(--x-d);
+    top: var(--y-d);
+  }
+}
+@keyframes derivar {
+  from { transform: translate3d(0, 0, 0) rotate(var(--rot, 0deg)); }
+  to { transform: translate3d(0, var(--d, -80px), 0) rotate(calc(var(--rot, 0deg) + 14deg)); }
+}
+@supports (animation-timeline: scroll()) {
+  .flor-2d {
+    animation: derivar linear both;
+    animation-timeline: scroll(root);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .flor-2d { animation: none; }
+}
+
+/* ---------- Entrada del hero: CSS puro, sin JavaScript ---------- */
+@keyframes entrada-subir {
+  from { transform: translateY(34px); }
+  to { transform: none; }
+}
+@keyframes entrada-aparecer {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes entrada-foto {
+  from { clip-path: inset(6% round 2rem); transform: scale(1.05); }
+  to { clip-path: inset(0 round 2rem); transform: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .entrada-subir { animation: entrada-subir 1.1s var(--ease-out-expo) both; }
+  .entrada-aparecer { animation: entrada-aparecer 0.8s var(--ease-out-expo) both; animation-delay: var(--retraso, 0s); }
+  .entrada-foto { animation: entrada-foto 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both; }
+}

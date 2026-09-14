@@ -10,19 +10,17 @@ const tamanos: Record<Tamano, string> = {
   sm: "text-display-sm",
 };
 
-interface HeadingProps {
+interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
   nivel?: Nivel;
   tamano?: Tamano;
-  className?: string;
   children: React.ReactNode;
-  id?: string;
 }
 
 /** Titular de marca: Cinzel, mayúsculas, tracking según tamaño. */
-export function Heading({ nivel = 2, tamano = "lg", className, children, id }: HeadingProps) {
+export function Heading({ nivel = 2, tamano = "lg", className, children, ...rest }: HeadingProps) {
   const Tag = `h${nivel}` as const;
   return (
-    <Tag id={id} className={cn("titular", tamanos[tamano], className)}>
+    <Tag className={cn("titular", tamanos[tamano], className)} {...rest}>
       {children}
     </Tag>
   );

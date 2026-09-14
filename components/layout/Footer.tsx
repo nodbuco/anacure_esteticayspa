@@ -10,7 +10,7 @@ import { SITE } from "@/data/site";
 export function Footer() {
   const anio = new Date().getFullYear();
   return (
-    <footer className="bg-noche text-blanco">
+    <footer className="relative z-10 bg-noche text-blanco">
       <Container className="py-16 lg:py-20">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[1.1fr_1fr_1fr_0.9fr]">
           <div>

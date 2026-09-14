@@ -19,3 +19,7 @@ Abre http://localhost:3000. La página interna http://localhost:3000/estilo mues
 npm run build
 npm start
 ```
+
+## Documentación técnica
+
+- [docs/animacion-3d.md](docs/animacion-3d.md): cómo funciona el fondo de flores 3D, el scroll y por qué no frena la página.
