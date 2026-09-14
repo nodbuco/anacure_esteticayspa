@@ -48,7 +48,7 @@ const EVENTOS_INTERACCION = ["scroll", "wheel", "pointerdown", "touchstart", "ke
  * 1. El SVG (2D) se pinta siempre, desde el HTML, sin JavaScript.
  * 2. Si el dispositivo lo permite, el 3D se descarga tras la carga completa de la página
  *    y solo cuando la persona interactúa (scroll, toque, tecla, ratón) o, como máximo,
- *    a los 5 s. Así el primer render y las métricas de carga no lo notan.
+ *    a los 9 s. Así el primer render y las métricas de carga no lo notan.
  * 3. Cuando el canvas está listo, el 2D se desvanece y el 3D aparece en su lugar.
  */
 export function FlowerField() {
@@ -70,7 +70,7 @@ export function FlowerField() {
     const armar = () => {
       if (cancelado) return;
       eventos.forEach((e) => window.addEventListener(e, montar, { passive: true, once: true }));
-      timer = window.setTimeout(montar, 5000);
+      timer = window.setTimeout(montar, 9000);
     };
 
     if (!permite3d()) {
@@ -93,6 +93,8 @@ export function FlowerField() {
 
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0" data-fondo={modo}>
+      {/* Aurora: dos veladuras de color muy suaves que dan profundidad al fondo */}
+      <div className="absolute inset-0 bg-[radial-gradient(60%_50%_at_82%_30%,rgb(235_221_243/0.75),transparent_70%),radial-gradient(45%_40%_at_10%_95%,rgb(212_228_229/0.7),transparent_70%)]" />
       <FlowerFallback oculto={listo} />
       {modo === "3d" && (
         <div className="absolute inset-0 transition-opacity duration-1000 ease-luxe" style={{ opacity: listo ? 1 : 0 }}>
