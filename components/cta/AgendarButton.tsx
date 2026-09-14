@@ -42,7 +42,7 @@ export function AgendarButton({ sede, servicio, ubicacion, variante = "primario"
       className={className}
       onClick={() => (sedeFinal ? ir(sedeFinal) : pedirSede(ir))}
     >
-      <IconoCalendario className="size-5" />
+      <IconoCalendario className="size-5 transition-transform duration-300 ease-luxe group-hover/boton:-rotate-6 group-hover/boton:scale-110" />
       <span>{children ?? "Agendar valoración"}</span>
     </Button>
   );

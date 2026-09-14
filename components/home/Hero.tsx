@@ -18,9 +18,9 @@ export function Hero() {
     <section
       data-scene="hero"
       aria-labelledby="hero-titulo"
-      className="relative z-10 flex min-h-[calc(100svh-4.5rem)] items-center overflow-hidden lg:min-h-[calc(100svh-5rem)]"
+      className="relative z-10 flex min-h-[calc(100svh-4.5rem)] items-center overflow-hidden lg:min-h-[min(calc(100svh-5rem),54rem)]"
     >
-      <Container className="grid w-full items-center gap-12 py-14 sm:py-16 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10 lg:py-16">
+      <Container className="grid w-full items-center gap-12 py-12 sm:py-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10 lg:pb-24 lg:pt-6">
         <div className="max-w-2xl">
           <p className="entrada-aparecer titular flex items-center gap-4 text-eyebrow text-verde" style={retraso(0.05)}>
             <span aria-hidden="true" className="h-px w-10 bg-verde/70" />

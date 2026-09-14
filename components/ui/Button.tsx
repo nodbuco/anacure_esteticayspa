@@ -5,14 +5,14 @@ export type VarianteBoton = "primario" | "whatsapp" | "secundario" | "fantasma" 
 export type TamanoBoton = "md" | "lg" | "icono";
 
 const base =
-  "inline-flex items-center justify-center gap-2.5 rounded-pill font-sans font-medium tracking-[0.01em] select-none whitespace-nowrap transition-[background-color,color,box-shadow,transform] duration-300 ease-luxe active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none";
+  "boton group/boton relative inline-flex items-center justify-center gap-2.5 overflow-hidden rounded-pill font-sans font-medium tracking-[0.01em] select-none whitespace-nowrap transition-[background-color,color,box-shadow,transform] duration-300 ease-luxe hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97] active:duration-100 disabled:opacity-50 disabled:pointer-events-none";
 
 const variantes: Record<VarianteBoton, string> = {
-  primario: "bg-purpura text-blanco shadow-soft hover:bg-ciruela hover:shadow-float",
-  whatsapp: "bg-verde text-blanco shadow-soft hover:bg-verde-oscuro hover:shadow-float",
-  secundario: "bg-blanco text-purpura ring-1 ring-inset ring-lila-300 hover:bg-lila-100 hover:ring-purpura",
+  primario: "boton-brillo bg-purpura text-blanco shadow-soft hover:bg-ciruela hover:shadow-[0_18px_40px_-14px_rgb(131_35_171/0.55)]",
+  whatsapp: "boton-brillo bg-verde text-blanco shadow-soft hover:bg-verde-oscuro hover:shadow-[0_18px_40px_-14px_rgb(20_123_128/0.55)]",
+  secundario: "bg-blanco text-purpura ring-1 ring-inset ring-lila-300 hover:bg-lila-100 hover:ring-purpura hover:shadow-soft",
   fantasma: "bg-transparent text-tinta hover:bg-lila-100",
-  inverso: "bg-blanco text-purpura hover:bg-lila-100 shadow-soft",
+  inverso: "bg-blanco text-purpura shadow-soft hover:bg-lila-100 hover:shadow-float",
 };
 
 const tamanos: Record<TamanoBoton, string> = {

@@ -30,7 +30,7 @@ export function WhatsAppButton({ sede, ubicacion, servicio, mensaje, variante = 
 
   const contenido = (
     <>
-      <IconoWhatsApp className={soloIcono ? "size-6" : "size-5"} />
+      <IconoWhatsApp className={`${soloIcono ? "size-6" : "size-5"} transition-transform duration-300 ease-luxe group-hover/boton:scale-110 group-hover/boton:rotate-[-8deg]`} />
       {soloIcono ? <span className="sr-only">{etiqueta}</span> : <span>{etiqueta}</span>}
     </>
   );
