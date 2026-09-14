@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { useFrame, useThree } from "@react-three/fiber";
 import { escena } from "@/lib/escenas";
-import { CAMARA_Z, disposicion, PALETAS, type FlorBase } from "./petalo";
+import { ALTO_VISIBLE_0, CAMARA_Z, disposicion, PALETAS, type FlorBase } from "./petalo";
 import { crearGeometriaPetalo } from "./petaloGeometria";
 
 const PUNTOS = 8; // como los ocho puntos del isotipo
@@ -142,18 +142,27 @@ export function Flores() {
     s.py = THREE.MathUtils.damp(s.py, escena.puntero.y, 2.5, dt);
     const prog = s.p;
 
-    camera.position.set(s.px * 0.6, -prog * 5.5 + s.py * 0.4, CAMARA_Z);
-    mira.set(s.px * 0.15, -prog * 5.5 - 0.3, 0);
+    const camY = -prog * 5.5;
+    camera.position.set(s.px * 0.6, camY + s.py * 0.4, CAMARA_Z);
+    mira.set(s.px * 0.15, camY - 0.3, 0);
     camera.lookAt(mira);
+    // Pulso (al tocar un paso de la experiencia): las flores se abren un instante
+    const pulso = escena.pulso ? Math.max(0, 1 - (performance.now() - escena.pulso) / 1400) : 0;
+    const extraApertura = 0.3 * Math.sin(pulso * Math.PI);
 
     for (let i = 0; i < flores.length; i++) {
       const f = flores[i];
       const giro = f.fase + t * f.giro + prog * Math.PI * 0.6;
-      const apertura = THREE.MathUtils.clamp((f.apertura0 + prog * 0.6 + 0.08 * Math.sin(t * 0.4 + f.fase)) * nacer, 0, 1);
+      const apertura = THREE.MathUtils.clamp((f.apertura0 + 0.25 * Math.sin(prog * Math.PI * 2 + f.fase) + 0.08 * Math.sin(t * 0.4 + f.fase) + extraApertura) * nacer, 0, 1);
       const cierreExt = THREE.MathUtils.lerp(1.4, 0.2, apertura);
       const cierreInt = THREE.MathUtils.lerp(1.5, 0.55, apertura);
       const x = f.x + Math.sin(t * 0.3 + f.fase) * f.vaiven;
-      const y = f.y + Math.cos(t * 0.25 + f.fase * 1.3) * f.vaiven + prog * f.deriva;
+      // Jardín continuo: la flor sube con el scroll y, al salir por arriba, vuelve a entrar por abajo.
+      const altoVisible = ALTO_VISIBLE_0 * ((CAMARA_Z - f.z) / CAMARA_Z);
+      const rango = altoVisible * 1.7;
+      let rel = f.y + Math.cos(t * 0.25 + f.fase * 1.3) * f.vaiven + prog * f.deriva - camY;
+      rel = ((((rel + rango / 2) % rango) + rango) % rango) - rango / 2;
+      const y = camY + rel;
       pos.set(x, y, f.z);
 
       // Corona exterior

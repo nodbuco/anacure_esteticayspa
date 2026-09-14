@@ -20,6 +20,8 @@ export interface EstadoEscena {
   activo: boolean;
   /** Lo registra el canvas: pide un fotograma cuando está en modo «demand» */
   invalidar?: () => void;
+  /** Marca de tiempo (performance.now) del último «pulso»: las flores florecen un instante */
+  pulso?: number;
 }
 
 export const escena: EstadoEscena = {

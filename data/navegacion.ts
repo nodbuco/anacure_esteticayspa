@@ -4,12 +4,11 @@ export interface EnlaceNav {
 }
 
 export const NAV_PRINCIPAL: EnlaceNav[] = [
-  { etiqueta: "Servicios", href: "/servicios" },
+  { etiqueta: "Servicios", href: "/#servicios" },
   { etiqueta: "La experiencia", href: "/#experiencia" },
-  { etiqueta: "Productos", href: "/productos" },
-  { etiqueta: "Blog", href: "/blog" },
+  { etiqueta: "Productos", href: "/#productos" },
+  { etiqueta: "Historias", href: "/#historias" },
   { etiqueta: "Sedes", href: "/#sedes" },
-  { etiqueta: "Sobre Ana Cure", href: "/sobre-ana-cure" },
 ];
 
 export const NAV_LEGAL: EnlaceNav[] = [
