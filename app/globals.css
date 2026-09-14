@@ -293,3 +293,16 @@
     }
   }
 }
+
+/* ---------- Artículos del blog (contenido escrito por los dueños) ---------- */
+.articulo h2 { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.06em; font-size: var(--text-display-sm); line-height: 1.35; color: var(--color-tinta); margin: 2.25rem 0 0.75rem; }
+.articulo h3 { font-weight: 600; color: var(--color-tinta); margin: 1.75rem 0 0.5rem; font-size: 1.1rem; }
+.articulo p { margin: 0 0 1.1rem; }
+.articulo ul, .articulo ol { margin: 0 0 1.1rem; padding-left: 1.4rem; }
+.articulo li { margin: 0.3rem 0; }
+.articulo li::marker { color: var(--color-purpura); }
+.articulo a { color: var(--color-verde); text-decoration: underline; text-underline-offset: 3px; }
+.articulo blockquote { border-left: 3px solid var(--color-purpura); padding: 0.25rem 0 0.25rem 1.25rem; margin: 1.5rem 0; color: var(--color-tinta); font-size: 1.15rem; }
+.articulo strong { color: var(--color-tinta); font-weight: 600; }
+.articulo hr { border: 0; border-top: 1px solid var(--color-linea); margin: 2rem 0; }
+.articulo img { border-radius: 1.25rem; margin: 1.5rem 0; }

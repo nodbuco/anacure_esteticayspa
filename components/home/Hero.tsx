@@ -60,7 +60,7 @@ export function Hero() {
               placeholder="blur"
               quality={78}
               sizes="(min-width: 1024px) 28rem, (min-width: 640px) 26rem, 88vw"
-              className="object-cover object-[50%_20%]"
+              className="object-cover object-top"
             />
           </div>
           <figcaption className="entrada-aparecer mt-5 flex flex-col gap-1 px-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4" style={retraso(0.9)}>
