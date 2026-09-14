@@ -19,8 +19,9 @@ function generar(): Flor2D[] {
     const p = elegirPaleta(rnd);
     const r = rnd();
     flores.push({
-      xm: r < 0.6 ? rnd() * 100 : 78 + rnd() * 25,
-      ym: r < 0.6 ? rnd() * 22 : 30 + rnd() * 50,
+      // Móvil: esquina superior derecha y borde derecho, lejos del titular
+      xm: r < 0.55 ? 48 + rnd() * 58 : 84 + rnd() * 24,
+      ym: r < 0.55 ? 1 + rnd() * 16 : 24 + rnd() * 50,
       xd: r < 0.75 ? 52 + rnd() * 48 : rnd() * 22,
       yd: r < 0.75 ? rnd() * 90 : 60 + rnd() * 40,
       tam: 56 + rnd() * 96,
@@ -56,10 +57,7 @@ export function FlowerFallback({ oculto }: { oculto: boolean }) {
               "--y-d": `${f.yd}%`,
               "--rot": `${f.rot}deg`,
               "--d": `${f.deriva}px`,
-              width: f.tam,
-              height: f.tam,
-              marginLeft: -f.tam / 2,
-              marginTop: -f.tam / 2,
+              "--tam": `${f.tam}px`,
             } as React.CSSProperties
           }
         >

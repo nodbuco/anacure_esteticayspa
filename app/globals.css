@@ -173,6 +173,11 @@
 .flor-2d {
   left: var(--x-m);
   top: var(--y-m);
+  /* En móvil las flores son un 40 % más pequeñas que en escritorio */
+  width: calc(var(--tam) * 0.6);
+  height: calc(var(--tam) * 0.6);
+  margin-left: calc(var(--tam) * -0.3);
+  margin-top: calc(var(--tam) * -0.3);
   transform: rotate(var(--rot, 0deg));
   will-change: transform;
 }
@@ -180,6 +185,10 @@
   .flor-2d {
     left: var(--x-d);
     top: var(--y-d);
+    width: var(--tam);
+    height: var(--tam);
+    margin-left: calc(var(--tam) * -0.5);
+    margin-top: calc(var(--tam) * -0.5);
   }
 }
 @keyframes derivar {
