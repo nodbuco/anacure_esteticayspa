@@ -98,7 +98,13 @@ export function FlowerField() {
       <FlowerFallback oculto={listo} />
       {modo === "3d" && (
         <div className="absolute inset-0 transition-opacity duration-1000 ease-luxe" style={{ opacity: listo ? 1 : 0 }}>
-          <FlowerCanvas alListo={() => setListo(true)} />
+          <FlowerCanvas
+            alListo={() => setListo(true)}
+            alPerder={() => {
+              setListo(false);
+              setModo("2d");
+            }}
+          />
         </div>
       )}
       {/* Veladura para que el texto del hero siga legible sobre las flores */}

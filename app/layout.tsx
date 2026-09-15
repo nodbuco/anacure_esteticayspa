@@ -6,6 +6,7 @@ import { FloatingWhatsApp } from "@/components/cta/FloatingWhatsApp";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { SedeProvider } from "@/components/sede/SedeProvider";
+import { menuServicios } from "@/data/servicios";
 import { SITE } from "@/data/site";
 import { jsonLdOrganizacion } from "@/lib/seo";
 import "./globals.css";
@@ -65,7 +66,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="es-CO" data-scroll-behavior="smooth" className={`${cinzel.variable} ${inter.variable} h-full`}>
       <body className="flex min-h-full flex-col">
         <SedeProvider>
-          <Header />
+          <Header servicios={menuServicios()} />
           <div id="contenido" className="flex-1">
             {children}
           </div>

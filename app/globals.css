@@ -306,3 +306,46 @@
 .articulo strong { color: var(--color-tinta); font-weight: 600; }
 .articulo hr { border: 0; border-top: 1px solid var(--color-linea); margin: 2rem 0; }
 .articulo img { border-radius: 1.25rem; margin: 1.5rem 0; }
+
+/* ---------- Menú desplegable de servicios (cabecera, escritorio) ---------- */
+/* Se despliega hacia abajo recortando desde arriba; las columnas entran escalonadas. */
+.menu-servicios {
+  visibility: hidden;
+  opacity: 0;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 0.26s var(--ease-out-expo), opacity 0.2s ease, visibility 0s linear 0.26s;
+}
+.menu-servicios[data-abierto="true"] {
+  visibility: visible;
+  opacity: 1;
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 0.55s var(--ease-out-expo), opacity 0.2s ease, visibility 0s;
+}
+.menu-servicios .menu-col {
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.menu-servicios[data-abierto="true"] .menu-col {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.45s var(--ease-out-expo), transform 0.55s var(--ease-out-expo);
+  transition-delay: calc(0.08s + var(--i, 0) * 0.045s);
+}
+@media (prefers-reduced-motion: reduce) {
+  .menu-servicios { clip-path: none; transition: opacity 0.15s ease, visibility 0s linear 0.15s; }
+  .menu-servicios[data-abierto="true"] { clip-path: none; transition: opacity 0.15s ease, visibility 0s; }
+  .menu-servicios .menu-col { opacity: 1; transform: none; transition: none; }
+}
+
+/* ---------- La experiencia: barra de progreso tipo «historias» ---------- */
+@keyframes llenar {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.experiencia-progreso {
+  transform-origin: left center;
+  animation-name: llenar;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+}

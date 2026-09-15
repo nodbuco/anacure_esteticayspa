@@ -16,7 +16,7 @@ import { COLORES } from "./petalo";
  * - alpha: el fondo lo pone la página; la niebla usa el mismo color (lila-50)
  *   para que las flores lejanas se fundan con él.
  */
-export default function FlowerCanvas({ alListo }: { alListo?: () => void }) {
+export default function FlowerCanvas({ alListo, alPerder }: { alListo?: () => void; alPerder?: () => void }) {
   useEffect(() => {
     if (!window.matchMedia("(pointer: fine)").matches) return;
     const mover = (e: PointerEvent) => {
@@ -39,6 +39,14 @@ export default function FlowerCanvas({ alListo }: { alListo?: () => void }) {
       gl={{ alpha: true, antialias: true, powerPreference: "low-power", stencil: false }}
       onCreated={({ gl }) => {
         gl.setClearColor(0x000000, 0);
+        // Si el navegador libera la GPU (pestaña en segundo plano en el móvil, poca memoria) y no la
+        // devuelve en un segundo, se vuelve al fondo 2D en lugar de dejar el fondo vacío.
+        const lienzo = gl.domElement;
+        lienzo.addEventListener("webglcontextlost", () => {
+          window.setTimeout(() => {
+            if (lienzo.isConnected && gl.getContext().isContextLost()) alPerder?.();
+          }, 1000);
+        });
         alListo?.();
       }}
       style={{ position: "absolute", inset: 0, pointerEvents: "none" }}

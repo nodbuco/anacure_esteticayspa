@@ -10,10 +10,12 @@ import { IconoCerrar, IconoInstagram, IconoMenu } from "@/components/ui/Icons";
 import { Logo } from "@/components/ui/Logo";
 import { NAV_PRINCIPAL } from "@/data/navegacion";
 import { LISTA_SEDES } from "@/data/sedes";
+import type { CategoriaMenu } from "@/data/servicios";
 import { SITE } from "@/data/site";
 import { cn } from "@/lib/cn";
+import { MenuServicios } from "./MenuServicios";
 
-export function Header() {
+export function Header({ servicios }: { servicios: CategoriaMenu[] }) {
   const pathname = usePathname();
   // Se guarda la ruta en la que se abrió: al navegar, deja de coincidir y el menú se cierra solo.
   const [abiertoEn, setAbiertoEn] = useState<string | null>(null);
@@ -36,16 +38,20 @@ export function Header() {
       <Container className="flex h-[4.5rem] items-center justify-between gap-4 lg:h-20">
         <Logo enlace className="h-11 lg:h-12" />
 
-        <nav aria-label="Principal" className="hidden items-center gap-7 lg:flex">
-          {NAV_PRINCIPAL.map((e) => (
-            <Link
-              key={e.href}
-              href={e.href}
-              className="relative whitespace-nowrap text-[0.95rem] font-medium text-tinta-suave transition-colors duration-300 hover:text-purpura after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-purpura after:transition-[width] after:duration-300 after:ease-luxe hover:after:w-full"
-            >
-              {e.etiqueta}
-            </Link>
-          ))}
+        <nav aria-label="Principal" className="hidden items-center gap-5 lg:flex xl:gap-7">
+          {NAV_PRINCIPAL.map((e) =>
+            e.href === "/servicios" ? (
+              <MenuServicios key={e.href} categorias={servicios} />
+            ) : (
+              <Link
+                key={e.href}
+                href={e.href}
+                className="relative whitespace-nowrap text-[0.95rem] font-medium text-tinta-suave transition-colors duration-300 hover:text-purpura after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-purpura after:transition-[width] after:duration-300 after:ease-luxe hover:after:w-full"
+              >
+                {e.etiqueta}
+              </Link>
+            ),
+          )}
         </nav>
 
         <div className="flex items-center gap-2">
@@ -75,13 +81,25 @@ export function Header() {
         <Container className="flex min-h-full flex-col py-8">
           <nav aria-label="Principal (móvil)" className="flex flex-col">
             {NAV_PRINCIPAL.map((e) => (
-              <Link
-                key={e.href}
-                href={e.href}
-                className="titular border-b border-linea py-4 text-display-sm text-tinta hover:text-purpura"
-              >
-                {e.etiqueta}
-              </Link>
+              <div key={e.href} className="border-b border-linea">
+                <Link href={e.href} onClick={() => setAbierto(false)} className="titular block py-4 text-display-sm text-tinta hover:text-purpura">
+                  {e.etiqueta}
+                </Link>
+                {e.href === "/servicios" && (
+                  <div className="-mt-1 flex flex-wrap gap-2 pb-4">
+                    {servicios.map((c) => (
+                      <Link
+                        key={c.slug}
+                        href={`/servicios#${c.slug}`}
+                        onClick={() => setAbierto(false)}
+                        className="rounded-pill bg-lila-100 px-3 py-1.5 text-sm text-tinta transition-colors hover:bg-lila-200 hover:text-purpura"
+                      >
+                        {c.corto}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
           </nav>
 

@@ -76,6 +76,8 @@ export interface Paso {
   imagen: string;
   alt: string;
   detalle: string;
+  /** A dónde lleva este momento: la acción que se ofrece al elegirlo */
+  accion: { etiqueta: string; href: string };
 }
 
 export const EXPERIENCIA: Paso[] = [
@@ -87,6 +89,7 @@ export const EXPERIENCIA: Paso[] = [
     imagen: "/media/experiencia/llegada.jpg",
     alt: "La doctora Ana Cure en la recepción del spa",
     detalle: "Recepción · aromas · silencio",
+    accion: { etiqueta: "Ver nuestras sedes", href: "/#sedes" },
   },
   {
     slug: "valoracion",
@@ -96,6 +99,7 @@ export const EXPERIENCIA: Paso[] = [
     imagen: "/media/experiencia/valoracion.jpg",
     alt: "Valoración y tratamiento con aparatología en Ana Cure",
     detalle: "Presencial o virtual",
+    accion: { etiqueta: "Agenda tu valoración sin costo", href: "/agendar?servicio=valoracion" },
   },
   {
     slug: "protocolo",
@@ -105,6 +109,7 @@ export const EXPERIENCIA: Paso[] = [
     imagen: "/media/experiencia/facial.jpg",
     alt: "Cabina facial con equipo Hydrafacial",
     detalle: "Facial · corporal · medicina estética",
+    accion: { etiqueta: "Conoce el Hydrafacial", href: "/servicios/hydrafacial" },
   },
   {
     slug: "relajate",
@@ -114,6 +119,7 @@ export const EXPERIENCIA: Paso[] = [
     imagen: "/media/experiencia/jacuzzi.jpg",
     alt: "Jacuzzi aromático con pétalos y velas",
     detalle: "Jacuzzi aromático en Aguachica",
+    accion: { etiqueta: "Ver los rituales de spa", href: "/servicios#spa" },
   },
   {
     slug: "respira",
@@ -123,6 +129,7 @@ export const EXPERIENCIA: Paso[] = [
     imagen: "/media/experiencia/hiperbarica.jpg",
     alt: "Cámara hiperbárica en la sede de Aguachica",
     detalle: "Solo en Aguachica",
+    accion: { etiqueta: "Conoce la cámara hiperbárica", href: "/servicios/camara-hiperbarica" },
   },
   {
     slug: "equipo",
@@ -132,6 +139,7 @@ export const EXPERIENCIA: Paso[] = [
     imagen: "/media/experiencia/equipo.jpg",
     alt: "Equipo de Ana Cure en la sede de Aguachica",
     detalle: "Dos sedes · un mismo equipo",
+    accion: { etiqueta: "Conoce a Ana Cure y su equipo", href: "/sobre-ana-cure" },
   },
 ];
 

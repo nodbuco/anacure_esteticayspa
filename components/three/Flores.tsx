@@ -54,6 +54,8 @@ function construir(ancho: number, alto: number, movil: boolean): Flor[] {
 }
 
 const m4 = new THREE.Matrix4();
+/** Instancia invisible (escala 0): estado de una malla antes de colocar sus flores. */
+const OCULTA = new THREE.Matrix4().makeScale(0, 0, 0);
 const q = new THREE.Quaternion();
 const qz = new THREE.Quaternion();
 const qx = new THREE.Quaternion();
@@ -70,7 +72,7 @@ export function Flores() {
   const petalosRef = useRef<THREE.InstancedMesh>(null);
   const centrosRef = useRef<THREE.InstancedMesh>(null);
   const puntosRef = useRef<THREE.InstancedMesh>(null);
-  const suave = useRef({ p: 0, px: 0, py: 0, t0: -1 });
+  const suave = useRef({ p: 0, px: 0, py: 0, t0: -1, escritas: false });
 
   const movil = size.width < 768;
   const flores = useMemo(() => construir(viewport.width, viewport.height, movil), [viewport.width, viewport.height, movil]);
@@ -115,7 +117,14 @@ export function Flores() {
       c.setColorAt(i, f.colorCentro);
       for (let k = 0; k < PUNTOS; k++) d.setColorAt(i * PUNTOS + k, f.colorPuntos);
     });
-    for (const mesh of [p, c, d]) if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+    // Hasta que useFrame las coloque, las instancias no se ven. Una malla recién creada tiene
+    // todas sus instancias en el origen: sin esto se vería un «pétalo» en el centro de la pantalla.
+    for (const mesh of [p, c, d]) {
+      for (let k = 0; k < mesh.count; k++) mesh.setMatrixAt(k, OCULTA);
+      mesh.instanceMatrix.needsUpdate = true;
+      if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+    }
+    suave.current.escritas = false;
     invalidate();
   }, [flores, invalidate]);
 
@@ -125,19 +134,26 @@ export function Flores() {
     const d = puntosRef.current;
     if (!p || !c || !d) return;
 
-    if (!escena.activo) {
+    const s = suave.current;
+    // Con el pie a la vista no hace falta dibujar, pero solo después de haber colocado las
+    // flores al menos una vez: si no, se quedarían ocultas o amontonadas en el centro.
+    if (!escena.activo && s.escritas) {
       if (state.frameloop !== "demand") state.setFrameloop("demand");
       return;
     }
-    if (state.frameloop !== "always") state.setFrameloop("always");
+    if (escena.activo && state.frameloop !== "always") state.setFrameloop("always");
 
     const t = state.clock.elapsedTime;
     const dt = Math.min(delta, 0.05);
-    const s = suave.current;
-    if (s.t0 < 0) s.t0 = t;
+    const objetivo = Number.isFinite(escena.global) ? THREE.MathUtils.clamp(escena.global, 0, 1) : s.p;
+    if (s.t0 < 0) {
+      // Primer fotograma: la cámara arranca donde está el scroll, sin barrido.
+      s.t0 = t;
+      s.p = objetivo;
+    }
     // Florecer al aparecer: de capullo a su apertura normal en 1,6 s
     const nacer = suavizar(0, 1, THREE.MathUtils.clamp((t - s.t0) / 1.6, 0, 1));
-    s.p = THREE.MathUtils.damp(s.p, escena.global, 3.2, dt);
+    s.p = THREE.MathUtils.damp(s.p, objetivo, 3.2, dt);
     s.px = THREE.MathUtils.damp(s.px, escena.puntero.x, 2.5, dt);
     s.py = THREE.MathUtils.damp(s.py, escena.puntero.y, 2.5, dt);
     const prog = s.p;
@@ -203,6 +219,7 @@ export function Flores() {
     p.instanceMatrix.needsUpdate = true;
     c.instanceMatrix.needsUpdate = true;
     d.instanceMatrix.needsUpdate = true;
+    s.escritas = true;
   });
 
   return (

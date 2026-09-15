@@ -1,4 +1,5 @@
 import Link from "next/link";
+import NodbuFirma from "@/components/nodbu-firma/NodbuFirma";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { IconoInstagram, IconoUbicacion, IconoWhatsApp } from "@/components/ui/Icons";
@@ -75,16 +76,22 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-3 border-t border-blanco/10 pt-8 text-xs text-blanco/55 sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {anio} {SITE.legal.razonSocial} · NIT {SITE.legal.nit}
-          </p>
-          <div className="flex flex-wrap gap-x-5 gap-y-2">
+        <div className="mt-14 flex flex-col items-center gap-3 border-t border-blanco/10 pt-8 text-center text-xs text-blanco/55 pb-8 sm:flex-row sm:items-center sm:justify-between sm:pb-0 sm:text-left">
+          <div className="flex flex-col items-center gap-x-5 gap-y-2 sm:flex-row sm:flex-wrap">
+            <p>
+              © {anio} {SITE.legal.razonSocial} · NIT {SITE.legal.nit}
+            </p>
             {NAV_LEGAL.map((e) => (
               <Link key={e.href} href={e.href} className="transition-colors hover:text-blanco">
                 {e.etiqueta}
               </Link>
             ))}
+          </div>
+          {/* Firma del desarrollador: un 20 % más grande que el © (0,75 rem × 1,2 = 0,9 rem).
+              Hereda un blanco al 75 %: la firma atenúa «Desarrollado por» a un 68 % de ese color,
+              y con el 55 % de la fila quedaba por debajo del contraste mínimo (4,5:1). */}
+          <div className="shrink-0 text-blanco/75 [--nodbu-firma-tamano:0.9rem]">
+            <NodbuFirma />
           </div>
         </div>
       </Container>

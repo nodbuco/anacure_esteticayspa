@@ -42,7 +42,7 @@ Todo lo que se repite en el sitio está en la carpeta `data/`. Se editan como te
 | Secciones del home: insignias (antes y después), pasos de la experiencia, marcas, historias | `data/home.ts` |
 | Equipo, títulos, trayectoria | `data/equipo.ts` (el equipo con `visible: false` no se muestra todavía) |
 | Marcas y productos | `data/productos.ts` |
-| Menú | `data/navegacion.ts` |
+| Menú | `data/navegacion.ts`. El desplegable de «Servicios» se arma solo desde `data/servicios.ts`: por categoría, primero los `destacado: true` y hasta cinco |
 
 Después de cambiar tratamientos u horario hay que correr `npm run ea:setup` para que Easy!Appointments
 quede igual (ver Parte 2).
@@ -107,7 +107,8 @@ npm run ea:setup    # sincroniza Easy!Appointments con data/ (ver docs/agenda.md
 ```
 app/                 páginas (App Router), API de la agenda, sitemap, robots, manifest
   api/agenda/        disponibilidad (GET) y citas (POST): único lugar que habla con Easy!Appointments
-components/          ui (botones, campos…), layout, home, agenda, three (3D), motion, sede, cta, analytics
+components/          ui (botones, campos…), layout, home, agenda, three (3D), motion, sede, cta, analytics,
+                     nodbu-firma (firma del desarrollador en el pie; no editar, se reemplaza entera)
 data/                contenido editable: site, sedes, servicios, home, equipo, productos, navegacion
                      agenda.generated.json: ids de Easy!Appointments (lo escribe scripts/ea-setup.ts)
 lib/                 agenda (reglas y validación), ea (cliente servidor), festivos, analytics, seo, whatsapp, blog

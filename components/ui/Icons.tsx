@@ -88,3 +88,27 @@ export function IconoExterno(props: P) {
     </svg>
   );
 }
+
+export function IconoChevron(props: P) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" {...trazo} {...props}>
+      <path d="M6 9.5l6 6 6-6" />
+    </svg>
+  );
+}
+
+export function IconoPausa(props: P) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" {...trazo} strokeWidth={2.2} {...props}>
+      <path d="M9 6.5v11M15 6.5v11" />
+    </svg>
+  );
+}
+
+export function IconoReproducir(props: P) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" {...props}>
+      <path d="M8.5 5.8v12.4a.8.8 0 0 0 1.22.68l9.9-6.2a.8.8 0 0 0 0-1.36l-9.9-6.2A.8.8 0 0 0 8.5 5.8Z" />
+    </svg>
+  );
+}

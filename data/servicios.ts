@@ -603,3 +603,38 @@ export function serviciosDe(categoria: CategoriaSlug): Servicio[] {
 export function servicioPorSlug(slug: string): Servicio | undefined {
   return SERVICIOS.find((s) => s.slug === slug);
 }
+
+/* ---------- Menú desplegable de la cabecera ---------- */
+
+export interface ServicioMenu {
+  slug: string;
+  nombre: string;
+}
+
+export interface CategoriaMenu {
+  slug: CategoriaSlug;
+  corto: string;
+  /** Servicios de la categoría en /servicios */
+  total: number;
+  servicios: ServicioMenu[];
+}
+
+/**
+ * Versión ligera del catálogo para el menú de la cabecera: por categoría, los destacados primero
+ * y hasta `porCategoria` servicios (las valoraciones tienen su propia tarjeta en el menú).
+ * Se calcula en el servidor (app/layout.tsx) para que las descripciones de los servicios
+ * no viajen en el JavaScript de todas las páginas.
+ */
+export function menuServicios(porCategoria = 5): CategoriaMenu[] {
+  return CATEGORIAS.map((c) => {
+    const todos = SERVICIOS.filter((s) => s.categoria === c.slug);
+    const elegibles = todos.filter((s) => !s.slug.startsWith("valoracion"));
+    const ordenados = [...elegibles.filter((s) => s.destacado), ...elegibles.filter((s) => !s.destacado)];
+    return {
+      slug: c.slug,
+      corto: c.corto,
+      total: todos.length,
+      servicios: ordenados.slice(0, porCategoria).map(({ slug, nombre }) => ({ slug, nombre })),
+    };
+  });
+}
