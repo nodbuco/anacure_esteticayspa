@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AgendarButton } from "@/components/cta/AgendarButton";
 import { WhatsAppButton } from "@/components/cta/WhatsAppButton";
+import { FormularioContacto } from "@/components/contacto/FormularioContacto";
 import { MapaSede } from "@/components/home/MapaSede";
 import { Encabezado } from "@/components/paginas/Encabezado";
 import { FondoSuave } from "@/components/paginas/FondoSuave";
@@ -24,6 +25,7 @@ export async function generateMetadata(props: PageProps<"/sedes/[sede]">): Promi
   const s = SEDES[sede];
   return {
     title: `Estética y spa en ${s.ciudad}, ${s.departamento}`,
+    alternates: { canonical: `/sedes/${s.slug}` },
     description: `Ana Cure Estética & Spa en ${s.ciudad}: ${s.direccion}. Medicina estética, tratamientos faciales y corporales y spa. Valoración sin costo. WhatsApp ${s.whatsappBonito}.`,
   };
 }
@@ -124,6 +126,9 @@ export default async function SedePage(props: PageProps<"/sedes/[sede]">) {
                 <AgendarButton sede={s.slug} ubicacion={`sede-${s.slug}`} tamano="lg" className="w-full" />
                 <WhatsAppButton sede={s.slug} ubicacion={`sede-${s.slug}`} variante="secundario" tamano="lg" className="w-full" />
               </div>
+            </div>
+            <div className="mt-6">
+              <FormularioContacto sede={s.slug} />
             </div>
             <p className="mt-6 text-sm text-gris">
               ¿Te queda más cerca {otra.nombre}?{" "}

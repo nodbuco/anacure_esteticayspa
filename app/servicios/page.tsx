@@ -10,6 +10,7 @@ import { CATEGORIAS, serviciosDe } from "@/data/servicios";
 import { SEDES } from "@/data/sedes";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/servicios" },
   title: "Servicios y tratamientos",
   description:
     "Facial y salud de la piel, medicina estética, corporal y moldeamiento, spa y bienestar, cejas y pestañas. Todos los tratamientos de Ana Cure en El Banco y Aguachica.",

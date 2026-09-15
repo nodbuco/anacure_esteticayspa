@@ -10,6 +10,7 @@ import { Heading } from "@/components/ui/Heading";
 import { CATALOGO } from "@/data/productos";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/productos" },
   title: "Productos y marcas",
   description: "Dermocosmética profesional en Ana Cure: ZO Skin Health, Uriage, Cantabria Labs, Heliocare, Medivelius Derma y nuestra línea propia. Catálogo informativo.",
 };

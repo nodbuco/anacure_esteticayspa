@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { CtaFinal } from "@/components/home/CtaFinal";
 import { Experiencia } from "@/components/home/Experiencia";
 import { Hero } from "@/components/home/Hero";
@@ -13,6 +14,8 @@ import { FlowerField } from "@/components/three/FlowerField";
  * las secciones; cada sección lleva data-scene para que el scroll gobierne la escena.
  * Las secciones sin fondo dejan ver las flores; las de fondo blanco o noche marcan el ritmo.
  */
+export const metadata: Metadata = { alternates: { canonical: "/" } };
+
 export default function Home() {
   return (
     <main className="relative">

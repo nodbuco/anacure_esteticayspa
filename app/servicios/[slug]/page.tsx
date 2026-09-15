@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { VistaServicio } from "@/components/analytics/VistaServicio";
 import { AgendarButton } from "@/components/cta/AgendarButton";
 import { WhatsAppButton } from "@/components/cta/WhatsAppButton";
 import { Encabezado } from "@/components/paginas/Encabezado";
@@ -35,7 +36,7 @@ export async function generateMetadata(props: PageProps<"/servicios/[slug]">): P
   const { slug } = await props.params;
   const s = servicioPorSlug(slug);
   if (!s) return {};
-  return { title: `${s.nombre}`, description: s.resumen };
+  return { title: s.nombre, description: s.resumen, alternates: { canonical: `/servicios/${s.slug}` } };
 }
 
 export default async function ServicioPage(props: PageProps<"/servicios/[slug]">) {
@@ -49,6 +50,7 @@ export default async function ServicioPage(props: PageProps<"/servicios/[slug]">
 
   return (
     <main className="relative">
+      <VistaServicio servicio={s.slug} categoria={s.categoria} />
       <FondoSuave />
       <Encabezado
         eyebrow={categoria.nombre}
@@ -97,32 +99,32 @@ export default async function ServicioPage(props: PageProps<"/servicios/[slug]">
           <aside className="lg:sticky lg:top-28 lg:self-start">
             <div className="glass rounded-card p-7 sm:p-8">
               <dl className="space-y-4 text-sm">
-                <div className="flex items-start gap-3">
-                  <IconoReloj className="mt-0.5 size-5 shrink-0 text-verde" />
-                  <div>
-                    <dt className="text-gris">Duración aproximada</dt>
-                    <dd className="font-medium text-tinta">{s.duracionMin} minutos</dd>
-                  </div>
+                <div>
+                  <dt className="flex items-center gap-3 text-gris">
+                    <IconoReloj className="size-5 shrink-0 text-verde" />
+                    Duración aproximada
+                  </dt>
+                    <dd className="pl-8 font-medium text-tinta">{s.duracionMin} minutos</dd>
                 </div>
-                <div className="flex items-start gap-3">
-                  <IconoUbicacion className="mt-0.5 size-5 shrink-0 text-verde" />
-                  <div>
-                    <dt className="text-gris">Disponible en</dt>
-                    <dd className="flex flex-wrap gap-x-3 font-medium text-tinta">
+                <div>
+                  <dt className="flex items-center gap-3 text-gris">
+                    <IconoUbicacion className="size-5 shrink-0 text-verde" />
+                    Disponible en
+                  </dt>
+                    <dd className="pl-8 flex flex-wrap gap-x-3 font-medium text-tinta">
                       {s.sedes.map((sede) => (
                         <Link key={sede} href={`/sedes/${sede}`} className="underline-offset-4 hover:text-purpura hover:underline">
                           {SEDES[sede].nombre}
                         </Link>
                       ))}
                     </dd>
-                  </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <IconoCheck className="mt-0.5 size-5 shrink-0 text-verde" />
-                  <div>
-                    <dt className="text-gris">Primera cita</dt>
-                    <dd className="font-medium text-tinta">Valoración sin costo</dd>
-                  </div>
+                <div>
+                  <dt className="flex items-center gap-3 text-gris">
+                    <IconoCheck className="size-5 shrink-0 text-verde" />
+                    Primera cita
+                  </dt>
+                    <dd className="pl-8 font-medium text-tinta">Valoración sin costo</dd>
                 </div>
               </dl>
               <div className="mt-7 flex flex-col gap-3">

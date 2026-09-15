@@ -8,6 +8,7 @@ import { IconoFlecha } from "@/components/ui/Icons";
 import { CATEGORIAS_BLOG, formatearFecha, listarArticulos } from "@/lib/blog";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/blog" },
   title: "Blog · Consejos para el cuidado de la piel",
   description: "Consejos del equipo de Ana Cure para cuidar tu piel en el clima del Caribe y el Cesar: sol, acné, manchas, hidratación y tratamientos.",
 };

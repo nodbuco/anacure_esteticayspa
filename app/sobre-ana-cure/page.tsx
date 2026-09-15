@@ -10,6 +10,7 @@ import { EQUIPO, HITOS, MARCAS_INSIGNIA, TITULOS } from "@/data/equipo";
 import { SITE } from "@/data/site";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/sobre-ana-cure" },
   title: "Sobre Ana Cure",
   description:
     "La historia de Ana Cure Estética & Spa: de salón de belleza en El Banco a centro de estética avanzada con dos sedes y clínica estética. La Dra. Ana Cure y su equipo.",

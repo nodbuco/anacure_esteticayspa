@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { SedeProvider } from "@/components/sede/SedeProvider";
 import { SITE } from "@/data/site";
+import { jsonLdOrganizacion } from "@/lib/seo";
 import "./globals.css";
 
 /*
@@ -46,7 +47,9 @@ export const metadata: Metadata = {
     locale: "es_CO",
     siteName: SITE.nombre,
     url: SITE.url,
+    images: [{ url: "/og/portada.jpg", width: 1200, height: 630, alt: "Ana Cure Estética & Spa: donde el cuidado se convierte en experiencia" }],
   },
+  twitter: { card: "summary_large_image" },
   robots: { index: true, follow: true },
 };
 
@@ -70,6 +73,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <FloatingWhatsApp />
         </SedeProvider>
         <PlausibleScript />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdOrganizacion()) }} />
       </body>
     </html>
   );

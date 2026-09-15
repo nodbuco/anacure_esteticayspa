@@ -1,4 +1,4 @@
-import { HORARIO, type Sede } from "@/data/sedes";
+import { HORARIO, LISTA_SEDES, type Sede } from "@/data/sedes";
 import { SITE } from "@/data/site";
 
 /** Datos estructurados schema.org de una sede (HealthAndBeautyBusiness). */
@@ -29,3 +29,49 @@ export function jsonLdSede(sede: Sede) {
     sameAs: [SITE.instagram],
   };
 }
+
+/** Organización y sitio web (schema.org), para el layout raíz. */
+export function jsonLdOrganizacion() {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${SITE.url}/#organizacion`,
+        name: SITE.nombre,
+        legalName: SITE.legal.razonSocial,
+        taxID: SITE.legal.nit,
+        url: SITE.url,
+        logo: `${SITE.url}/brand/logo-vertical-color-1500.png`,
+        image: `${SITE.url}/og/portada.jpg`,
+        sameAs: [SITE.instagram],
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: SEDES_DIRECCION_LEGAL,
+          addressLocality: "Aguachica",
+          addressRegion: "Cesar",
+          addressCountry: "CO",
+        },
+        contactPoint: LISTA_SEDES.map((s) => ({
+          "@type": "ContactPoint",
+          telephone: s.telefonoInternacional,
+          contactType: "customer service",
+          areaServed: "CO",
+          availableLanguage: "es",
+          name: `Sede ${s.nombre}`,
+        })),
+        subOrganization: LISTA_SEDES.map((s) => ({ "@id": `${SITE.url}/sedes/${s.slug}#negocio` })),
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${SITE.url}/#sitio`,
+        url: SITE.url,
+        name: SITE.nombre,
+        inLanguage: "es-CO",
+        publisher: { "@id": `${SITE.url}/#organizacion` },
+      },
+    ],
+  };
+}
+
+const SEDES_DIRECCION_LEGAL = "Cra 33 # 3-27";

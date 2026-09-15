@@ -6,6 +6,7 @@ import { LISTA_SEDES } from "@/data/sedes";
 import { SITE } from "@/data/site";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/privacidad" },
   title: "Política de privacidad y tratamiento de datos",
   description: "Cómo Ana Cure Estética & Spa trata tus datos personales conforme a la Ley 1581 de 2012 y el Decreto 1377 de 2013 de Colombia.",
   robots: { index: true, follow: false },

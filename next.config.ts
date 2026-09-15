@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   // Docker/Coolify: genera .next/standalone con lo mínimo para correr en producción.
   output: "standalone",
   // El blog se lee del sistema de archivos en el servidor: incluir content/ en la imagen Docker.
-  outputFileTracingIncludes: { "/blog/**": ["./content/**/*"] },
+  outputFileTracingIncludes: { "/blog/**": ["./content/**/*"], "/sitemap.xml": ["./content/**/*"] },
   // Raíz explícita: evita que Turbopack suba a la carpeta de usuario buscando lockfiles.
   turbopack: { root: path.resolve() },
   images: {
