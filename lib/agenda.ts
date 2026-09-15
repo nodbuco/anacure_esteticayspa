@@ -19,14 +19,6 @@ export function hoyEnColombia(ahora: Date = new Date()): string {
   return new Intl.DateTimeFormat("en-CA", { timeZone: ZONA_HORARIA, year: "numeric", month: "2-digit", day: "2-digit" }).format(ahora);
 }
 
-/** Hora actual en Colombia como minutos desde medianoche (para ocultar cupos ya pasados). */
-export function minutosAhoraEnColombia(ahora: Date = new Date()): number {
-  const partes = new Intl.DateTimeFormat("en-GB", { timeZone: ZONA_HORARIA, hour: "2-digit", minute: "2-digit", hour12: false }).formatToParts(ahora);
-  const h = Number(partes.find((p) => p.type === "hour")?.value ?? 0) % 24;
-  const m = Number(partes.find((p) => p.type === "minute")?.value ?? 0);
-  return h * 60 + m;
-}
-
 function aFechaUtc(fecha: string): Date {
   const [a, m, d] = fecha.split("-").map(Number);
   return new Date(Date.UTC(a, m - 1, d));
@@ -107,12 +99,6 @@ export function normalizarCelular(entrada: string): string | null {
   return `+57${local}`;
 }
 
-/** "+573001234567" → "300 123 4567" */
-export function celularBonito(e164: string): string {
-  const local = e164.replace(/\D/g, "").slice(-10);
-  return `${local.slice(0, 3)} ${local.slice(3, 6)} ${local.slice(6)}`;
-}
-
 /* ------------------------------------------------------------------ */
 /* Validación (misma en el navegador y en el servidor)                  */
 /* ------------------------------------------------------------------ */
@@ -139,8 +125,6 @@ export const EsquemaCita = z.object({
   notas: z.string().trim().max(500, "Máximo 500 caracteres").optional(),
   acepta: z.literal(true, { error: "Necesitamos tu autorización para guardar la cita" }),
 });
-
-export type DatosCita = z.infer<typeof EsquemaCita>;
 
 export interface CitaCreada {
   id: number;

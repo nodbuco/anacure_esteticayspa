@@ -108,7 +108,3 @@ export function festivoEn(fecha: string): string | null {
   }
   return mapa.get(fecha) ?? null;
 }
-
-export function esFestivo(fecha: string): boolean {
-  return festivoEn(fecha) !== null;
-}

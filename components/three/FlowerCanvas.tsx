@@ -49,6 +49,8 @@ export default function FlowerCanvas({ alListo, alPerder }: { alListo?: () => vo
         });
         alListo?.();
       }}
+      // En línea a propósito: reemplaza el style por defecto de <Canvas> (position relative y
+      // pointer-events auto), que ninguna clase puede sobrescribir.
       style={{ position: "absolute", inset: 0, pointerEvents: "none" }}
     >
       <fog attach="fog" args={[COLORES.fondo, 10.5, 21]} />

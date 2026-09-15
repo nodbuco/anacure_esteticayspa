@@ -3,24 +3,14 @@ import { SEDES } from "@/data/sedes";
 import { servicioPorSlug } from "@/data/servicios";
 import { type CitaCreada, EsquemaCita, fechaReservable, normalizarCelular, sumarMinutos } from "@/lib/agenda";
 import { buscarClientePorCelular, crearCita, crearCliente, ErrorAgenda, horasDisponibles } from "@/lib/ea";
+import { crearLimitador, ipCliente } from "@/lib/limite";
 
 export const dynamic = "force-dynamic";
 
 const SIN_CACHE = { "Cache-Control": "no-store" };
 
-/* Freno sencillo contra abuso: 6 intentos por IP cada 10 minutos (en memoria del proceso). */
-const VENTANA_MS = 10 * 60_000;
-const MAX_INTENTOS = 6;
-const intentos = new Map<string, number[]>();
-
-function limitado(ip: string): boolean {
-  const ahora = Date.now();
-  const recientes = (intentos.get(ip) ?? []).filter((t) => ahora - t < VENTANA_MS);
-  recientes.push(ahora);
-  intentos.set(ip, recientes);
-  if (intentos.size > 5000) intentos.clear();
-  return recientes.length > MAX_INTENTOS;
-}
+/* Freno contra abuso: 6 intentos de cita por IP cada 10 minutos. */
+const limitado = crearLimitador(6, 10 * 60_000);
 
 /**
  * POST /api/agenda/citas
@@ -28,8 +18,7 @@ function limitado(ip: string): boolean {
  * Crea (o reutiliza) el cliente por celular y registra la cita en Easy!Appointments.
  */
 export async function POST(peticion: Request) {
-  const ip = peticion.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
-  if (limitado(ip)) {
+  if (limitado(ipCliente(peticion))) {
     return NextResponse.json({ error: "Demasiados intentos seguidos. Espera unos minutos o escríbenos por WhatsApp." }, { status: 429, headers: SIN_CACHE });
   }
 

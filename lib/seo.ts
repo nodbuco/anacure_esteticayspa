@@ -1,5 +1,13 @@
-import { HORARIO, LISTA_SEDES, type Sede } from "@/data/sedes";
+import { HORARIO, LISTA_SEDES, SEDES, type Sede } from "@/data/sedes";
 import { SITE } from "@/data/site";
+
+/** La dirección legal de la empresa es la de la sede de Aguachica (SITE.legal.direccion). */
+const SEDE_LEGAL = SEDES.aguachica;
+
+/** JSON-LD listo para un <script>: escapa «<» para que ningún texto pueda cerrar la etiqueta. */
+export function jsonLdSeguro(datos: unknown): string {
+  return JSON.stringify(datos).replace(/</g, "\\u003c");
+}
 
 /** Datos estructurados schema.org de una sede (HealthAndBeautyBusiness). */
 export function jsonLdSede(sede: Sede) {
@@ -47,9 +55,9 @@ export function jsonLdOrganizacion() {
         sameAs: [SITE.instagram],
         address: {
           "@type": "PostalAddress",
-          streetAddress: SEDES_DIRECCION_LEGAL,
-          addressLocality: "Aguachica",
-          addressRegion: "Cesar",
+          streetAddress: SEDE_LEGAL.direccion,
+          addressLocality: SEDE_LEGAL.ciudad,
+          addressRegion: SEDE_LEGAL.departamento,
           addressCountry: "CO",
         },
         contactPoint: LISTA_SEDES.map((s) => ({
@@ -73,5 +81,3 @@ export function jsonLdOrganizacion() {
     ],
   };
 }
-
-const SEDES_DIRECCION_LEGAL = "Cra 33 # 3-27";

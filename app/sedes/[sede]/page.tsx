@@ -13,7 +13,7 @@ import { Heading } from "@/components/ui/Heading";
 import { IconoExterno, IconoReloj, IconoUbicacion, IconoWhatsApp } from "@/components/ui/Icons";
 import { esSede, HORARIO, LISTA_SEDES, SEDES } from "@/data/sedes";
 import { CATEGORIAS, SERVICIOS } from "@/data/servicios";
-import { jsonLdSede } from "@/lib/seo";
+import { jsonLdSede, jsonLdSeguro } from "@/lib/seo";
 
 export function generateStaticParams() {
   return LISTA_SEDES.map((s) => ({ sede: s.slug }));
@@ -40,7 +40,7 @@ export default async function SedePage(props: PageProps<"/sedes/[sede]">) {
   return (
     <main className="relative">
       <FondoSuave />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdSede(s)) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdSeguro(jsonLdSede(s)) }} />
       <Encabezado
         eyebrow={`${s.departamento} · Colombia`}
         titulo={`Ana Cure en ${s.nombre}`}

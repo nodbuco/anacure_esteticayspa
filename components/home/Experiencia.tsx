@@ -29,6 +29,21 @@ function suscribirMovimiento(avisar: () => void) {
 }
 
 type Grupo = "movil" | "escritorio";
+type EstadoSegmento = "lleno" | "en-curso" | "vacio";
+
+/** Segmento de la barra de progreso: ya visto, el actual avanzando, o por venir. */
+function estadoSegmento(i: number, activo: number, autoplay: boolean): EstadoSegmento {
+  if (i < activo) return "lleno";
+  if (i > activo) return "vacio";
+  return autoplay ? "en-curso" : "lleno";
+}
+
+/** Círculo numerado de la línea de tiempo: actual, ya visto o pendiente. */
+function claseNodo(es: boolean, visto: boolean): string {
+  if (es) return "scale-110 border-purpura bg-purpura text-blanco shadow-float";
+  if (visto) return "border-lila-300 bg-lila-100 text-purpura group-hover:border-purpura";
+  return "border-linea bg-blanco text-gris group-hover:border-lila-400 group-hover:text-purpura";
+}
 
 /**
  * La experiencia: seis momentos como un recorrido guiado.
@@ -195,20 +210,22 @@ export function Experiencia() {
 
             {/* Progreso tipo «historias» */}
             <div aria-hidden="true" className="absolute inset-x-5 top-5 flex gap-1.5 sm:inset-x-6">
-              {EXPERIENCIA.map((p, i) => (
-                <span key={p.slug} className="h-[3px] flex-1 overflow-hidden rounded-full bg-blanco/30">
-                  {i < activo || (i === activo && !autoplay) ? (
-                    <span className="block size-full rounded-full bg-blanco" />
-                  ) : i === activo ? (
-                    <span
-                      key={activo}
-                      className="experiencia-progreso block size-full rounded-full bg-blanco"
-                      style={{ animationDuration: `${DURACION_MS}ms`, animationPlayState: corriendo ? "running" : "paused" }}
-                      onAnimationEnd={() => setActivo((a) => (a + 1) % TOTAL)}
-                    />
-                  ) : null}
-                </span>
-              ))}
+              {EXPERIENCIA.map((p, i) => {
+                const estado = estadoSegmento(i, activo, autoplay);
+                return (
+                  <span key={p.slug} className="h-[3px] flex-1 overflow-hidden rounded-full bg-blanco/30">
+                    {estado === "lleno" && <span className="block size-full rounded-full bg-blanco" />}
+                    {estado === "en-curso" && (
+                      <span
+                        key={activo}
+                        className="experiencia-progreso block size-full rounded-full bg-blanco"
+                        style={{ animationDuration: `${DURACION_MS}ms`, animationPlayState: corriendo ? "running" : "paused" }}
+                        onAnimationEnd={() => setActivo((a) => (a + 1) % TOTAL)}
+                      />
+                    )}
+                  </span>
+                );
+              })}
             </div>
 
             {!menosMovimiento && (
@@ -299,11 +316,7 @@ export function Experiencia() {
                       <span
                         className={cn(
                           "titular absolute left-0 top-0 inline-flex size-[2.6rem] items-center justify-center rounded-full border text-[0.72rem] tracking-[0.1em] transition-[background-color,border-color,color,box-shadow,scale] duration-500 ease-luxe",
-                          es
-                            ? "scale-110 border-purpura bg-purpura text-blanco shadow-float"
-                            : visto
-                              ? "border-lila-300 bg-lila-100 text-purpura group-hover:border-purpura"
-                              : "border-linea bg-blanco text-gris group-hover:border-lila-400 group-hover:text-purpura",
+                          claseNodo(es, visto),
                         )}
                       >
                         {p.numero}

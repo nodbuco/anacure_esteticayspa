@@ -10,7 +10,7 @@ import { IconoCalendario, IconoCheck, IconoExterno, IconoFlecha, IconoReloj, Ico
 import { LISTA_SEDES, SEDES, type Sede, type SedeSlug } from "@/data/sedes";
 import type { CategoriaSlug } from "@/data/servicios";
 import { track } from "@/lib/analytics";
-import { type CitaCreada, DIAS_CORTOS, diasDeAgenda, EsquemaCita, formatearFecha, formatearHora, MESES_CORTOS, ZONA_HORARIA } from "@/lib/agenda";
+import { type CitaCreada, type DiaAgenda, DIAS_CORTOS, diasDeAgenda, EsquemaCita, formatearFecha, formatearHora, MESES_CORTOS, ZONA_HORARIA } from "@/lib/agenda";
 import { cn } from "@/lib/cn";
 
 export interface ServicioAgendable {
@@ -84,7 +84,8 @@ function reducir(estado: Estado, accion: Accion): Estado {
 function estadoInicial({ sedeInicial, servicioInicial, servicios }: Props): Estado {
   const candidato = servicioInicial ? servicios.find((s) => s.slug === servicioInicial) : undefined;
   const servicio = candidato && (!sedeInicial || candidato.sedes.includes(sedeInicial)) ? candidato.slug : null;
-  const paso: Paso = sedeInicial ? (servicio ? 3 : 2) : 1;
+  let paso: Paso = 1;
+  if (sedeInicial) paso = servicio ? 3 : 2;
   return { paso, sede: sedeInicial, servicio, fecha: null, hora: null, cita: null, nombre: "", aviso: null };
 }
 
@@ -175,6 +176,19 @@ const PASOS: Array<{ n: Paso; etiqueta: string }> = [
   { n: 4, etiqueta: "Tus datos" },
 ];
 
+type EstadoVisualPaso = "actual" | "hecho" | "pendiente";
+
+const ESTILO_PASO: Record<EstadoVisualPaso, { boton: string; numero: string }> = {
+  actual: { boton: "bg-purpura text-blanco shadow-soft", numero: "bg-blanco/20 text-blanco" },
+  hecho: { boton: "bg-menta-100 text-verde-oscuro hover:bg-menta-200", numero: "bg-verde text-blanco" },
+  pendiente: { boton: "text-gris", numero: "border border-linea bg-blanco text-gris" },
+};
+
+function estadoDePaso(esActual: boolean, hecho: boolean): EstadoVisualPaso {
+  if (esActual) return "actual";
+  return hecho ? "hecho" : "pendiente";
+}
+
 function Pasos({
   actual,
   sede,
@@ -200,6 +214,7 @@ function Pasos({
         const esActual = p.n === actual;
         const hecho = listo[p.n] && !esActual;
         const puede = alcanzable(p.n) && !esActual;
+        const estadoVisual = estadoDePaso(esActual, hecho);
         return (
           <li key={p.n} className="flex min-w-0 items-center gap-2 sm:gap-3">
             <button
@@ -209,13 +224,13 @@ function Pasos({
               aria-current={esActual ? "step" : undefined}
               className={cn(
                 "group inline-flex items-center gap-2 rounded-pill py-1.5 pl-1.5 pr-3 text-sm transition-colors duration-300 disabled:cursor-default",
-                esActual ? "bg-purpura text-blanco shadow-soft" : hecho ? "bg-menta-100 text-verde-oscuro hover:bg-menta-200" : "text-gris",
+                ESTILO_PASO[estadoVisual].boton,
               )}
             >
               <span
                 className={cn(
                   "inline-flex size-6 shrink-0 items-center justify-center rounded-full text-[0.72rem] font-semibold",
-                  esActual ? "bg-blanco/20 text-blanco" : hecho ? "bg-verde text-blanco" : "border border-linea bg-blanco text-gris",
+                  ESTILO_PASO[estadoVisual].numero,
                 )}
               >
                 {hecho ? <IconoCheck className="size-3.5" /> : p.n}
@@ -364,6 +379,20 @@ function PasoServicio({
 /* Paso 3 · Fecha y hora                                                */
 /* ------------------------------------------------------------------ */
 
+/** Estilo de cada día del calendario: elegido, disponible o cerrado. */
+function claseDia(activo: boolean, abierto: boolean): string {
+  if (activo) return "border-purpura bg-purpura text-blanco";
+  if (abierto) return "border-linea bg-blanco text-tinta hover:border-purpura hover:bg-lila-50";
+  return "border-transparent bg-lila-50 text-gris-claro";
+}
+
+/** Texto bajo el número del día: festivo, cerrado (domingo) o el mes. */
+function etiquetaDia(d: DiaAgenda, mes: number): string {
+  if (d.festivo) return "festivo";
+  if (!d.abierto) return "cerrado";
+  return MESES_CORTOS[mes - 1];
+}
+
 interface ResultadoHoras {
   clave: string;
   horas?: string[];
@@ -398,16 +427,18 @@ function PasoFecha({
     if (!clave || !fecha) return;
     const control = new AbortController();
     const params = new URLSearchParams({ sede, servicio: servicio.slug, fecha });
-    fetch(`/api/agenda/disponibilidad?${params}`, { signal: control.signal })
-      .then(async (r) => {
+    const consultar = async () => {
+      try {
+        const r = await fetch(`/api/agenda/disponibilidad?${params}`, { signal: control.signal });
         const json = (await r.json().catch(() => ({}))) as { horas?: string[]; motivo?: string; error?: string };
         if (!r.ok) throw new Error(json.error ?? "No pudimos consultar la agenda");
         setResultado({ clave, horas: json.horas ?? [], motivo: json.motivo });
-      })
-      .catch((e: unknown) => {
+      } catch (e: unknown) {
         if (control.signal.aborted) return;
         setResultado({ clave, error: e instanceof Error ? e.message : "No pudimos consultar la agenda" });
-      });
+      }
+    };
+    void consultar();
     return () => control.abort();
   }, [clave, sede, servicio.slug, fecha]);
 
@@ -420,10 +451,9 @@ function PasoFecha({
       <TituloPaso titulo="¿Cuándo te viene bien?" texto={`${servicio.nombre} · ${servicio.duracionMin} min · Sede ${SEDES[sede].nombre}. Horas de Colombia.`} />
 
       <div className="-mx-5 mt-6 flex snap-x gap-2 overflow-x-auto px-5 pb-2 sm:-mx-8 sm:px-8 [scrollbar-width:thin]" role="listbox" aria-label="Día">
-        {dias.map((d, i) => {
+        {dias.map((d) => {
           const [, m, dia] = d.fecha.split("-").map(Number);
           const activo = d.fecha === fecha;
-          const mostrarMes = i === 0 || dia === 1;
           return (
             <button
               key={d.fecha}
@@ -435,12 +465,12 @@ function PasoFecha({
               onClick={() => alElegirFecha(d.fecha)}
               className={cn(
                 "flex min-w-[4.4rem] shrink-0 snap-start flex-col items-center rounded-[1rem] border px-2 py-2.5 transition-colors duration-200",
-                activo ? "border-purpura bg-purpura text-blanco" : d.abierto ? "border-linea bg-blanco text-tinta hover:border-purpura hover:bg-lila-50" : "border-transparent bg-lila-50 text-gris-claro",
+                claseDia(activo, d.abierto),
               )}
             >
               <span className="text-[0.68rem] uppercase tracking-[0.12em]">{DIAS_CORTOS[d.diaSemana]}</span>
               <span className={cn("titular mt-0.5 text-xl leading-none", !d.abierto && "line-through decoration-1")}>{dia}</span>
-              <span className="mt-1 text-[0.68rem]">{mostrarMes || !d.abierto ? (d.festivo ? "festivo" : d.abierto ? MESES_CORTOS[m - 1] : "cerrado") : MESES_CORTOS[m - 1]}</span>
+              <span className="mt-1 text-[0.68rem]">{etiquetaDia(d, m)}</span>
             </button>
           );
         })}

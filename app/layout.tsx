@@ -8,7 +8,7 @@ import { Header } from "@/components/layout/Header";
 import { SedeProvider } from "@/components/sede/SedeProvider";
 import { menuServicios } from "@/data/servicios";
 import { SITE } from "@/data/site";
-import { jsonLdOrganizacion } from "@/lib/seo";
+import { jsonLdOrganizacion, jsonLdSeguro } from "@/lib/seo";
 import "./globals.css";
 
 /*
@@ -74,7 +74,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <FloatingWhatsApp />
         </SedeProvider>
         <PlausibleScript />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdOrganizacion()) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdSeguro(jsonLdOrganizacion()) }} />
       </body>
     </html>
   );

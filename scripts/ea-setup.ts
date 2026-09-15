@@ -20,6 +20,7 @@ import { writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { HORARIO, LISTA_SEDES, type SedeSlug } from "../data/sedes";
 import { CATEGORIAS, SERVICIOS, type CategoriaSlug } from "../data/servicios";
+import { SITE } from "../data/site";
 import { festivosDelAnio } from "../lib/festivos";
 
 const BASE = process.env.EA_BASE_URL;
@@ -125,8 +126,8 @@ function planDeTrabajo(): Record<string, Tramo> {
 }
 
 const AJUSTES: Record<string, string> = {
-  company_name: "Ana Cure Estética & Spa",
-  company_link: "https://anacure.co",
+  company_name: SITE.nombre,
+  company_link: SITE.url,
   company_working_plan: JSON.stringify(planDeTrabajo()),
   first_weekday: "monday",
   date_format: "DMY",
