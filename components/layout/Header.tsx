@@ -31,7 +31,13 @@ export function Header({ servicios }: { servicios: CategoriaMenu[] }) {
   }, [abierto]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-linea/70 bg-blanco/85 backdrop-blur-md">
+    <header className="sticky top-0 z-50">
+      {/*
+        Fondo translúcido en una capa propia. Si el desenfoque (backdrop-filter) estuviera en el
+        <header>, este se convertiría en el marco de sus hijos «fixed» y el menú móvil quedaría
+        encerrado en los 72 px de la cabecera, con altura cero.
+      */}
+      <div aria-hidden="true" className="absolute inset-0 -z-10 border-b border-linea/70 bg-blanco/85 backdrop-blur-md" />
       <a href="#contenido" className="sr-only-focusable fixed left-4 top-4 z-[60] rounded-pill bg-purpura px-4 py-2 text-sm font-medium text-blanco">
         Ir al contenido
       </a>
