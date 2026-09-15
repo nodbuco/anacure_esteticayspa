@@ -1,17 +1,16 @@
-import Image from "next/image";
 import { AgendarButton } from "@/components/cta/AgendarButton";
 import { WhatsAppButton } from "@/components/cta/WhatsAppButton";
 import { Container } from "@/components/ui/Container";
 import { IconoCheck } from "@/components/ui/Icons";
-import heroFoto from "@/public/media/hero/ana-cure.jpg";
+import { RetratoHero } from "./RetratoHero";
 
 const retraso = (s: number) => ({ "--retraso": `${s}s` }) as React.CSSProperties;
 
 /**
  * Hero. Entrada en CSS puro (clases .entrada-*): arranca en el primer pintado, sin
  * JavaScript, y respeta prefers-reduced-motion. El titular solo se desplaza (nunca
- * opacidad 0) porque es el elemento LCP. La foto va en un arco que se funde con la
- * página por abajo, sin marco, para que las flores y el retrato compartan el mismo aire.
+ * opacidad 0) porque es el elemento LCP. La foto (RetratoHero) va en un arco que se funde
+ * con la página por abajo y se revela cuando la imagen ya cargó, nunca a medio pintar.
  */
 export function Hero() {
   return (
@@ -46,28 +45,7 @@ export function Hero() {
           </p>
         </div>
 
-        <figure className="relative mx-auto w-full max-w-[24rem] sm:max-w-[26rem] lg:max-w-[28rem] lg:justify-self-end">
-          {/* Halo suave detrás del arco: une el retrato con el fondo */}
-          <div aria-hidden="true" className="entrada-aparecer absolute -inset-10 -z-10 rounded-full bg-[radial-gradient(closest-side,rgb(235_221_243/0.9),rgb(235_221_243/0.35)_55%,transparent_75%)]" style={retraso(0.3)} />
-          {/* Arco exterior fino, ligeramente desplazado */}
-          <div aria-hidden="true" className="entrada-aparecer absolute -inset-3 rounded-t-full rounded-b-[3rem] border border-lila-300/80" style={retraso(0.8)} />
-          <div className="entrada-foto arco-foto relative aspect-[3/4]">
-            <Image
-              src={heroFoto}
-              alt="La doctora Ana Cure, gerente y cosmetóloga de Ana Cure Estética & Spa"
-              fill
-              priority
-              placeholder="blur"
-              quality={78}
-              sizes="(min-width: 1024px) 28rem, (min-width: 640px) 26rem, 88vw"
-              className="object-cover object-[50%_20%]"
-            />
-          </div>
-          <figcaption className="entrada-aparecer mt-5 flex flex-col gap-1 px-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4" style={retraso(0.9)}>
-            <span className="titular whitespace-nowrap text-[0.72rem] tracking-[0.22em] text-purpura">Dra. Ana Cure</span>
-            <span className="text-sm text-gris sm:text-right">Cosmetóloga · maestría internacional · fundadora</span>
-          </figcaption>
-        </figure>
+        <RetratoHero />
       </Container>
 
       {/* Indicación de scroll (solo escritorio) */}

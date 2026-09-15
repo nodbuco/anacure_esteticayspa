@@ -214,14 +214,9 @@
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: none; }
 }
-@keyframes entrada-foto {
-  from { clip-path: inset(6% round 2rem); transform: scale(1.05); }
-  to { clip-path: inset(0 round 2rem); transform: none; }
-}
 @media (prefers-reduced-motion: no-preference) {
   .entrada-subir { animation: entrada-subir 1.1s var(--ease-out-expo) both; }
   .entrada-aparecer { animation: entrada-aparecer 0.8s var(--ease-out-expo) both; animation-delay: var(--retraso, 0s); }
-  .entrada-foto { animation: entrada-foto 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both; }
 }
 
 /* ---------- Hero: arco de la foto y guía de scroll ---------- */
@@ -232,6 +227,66 @@
   -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
   mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
 }
+/* ---------- Hero: revelado del retrato (RetratoHero) ----------
+   Antes de revelar: el arco ya tiene su forma y lo llena la foto borrosa; si la carga
+   tarda, un brillo lento lo recorre. Al revelar (data-revelado): el velo se disuelve
+   sobre la foto nítida mientras ambas se asientan (un enfoque, no un recorte), la línea
+   del arco se dibuja de abajo arriba y aparece el pie. */
+.retrato-velo {
+  overflow: hidden;
+  transition: opacity 1.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 1.4s;
+}
+.retrato-velo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgb(235 221 243 / 0.45), rgb(235 221 243 / 0.45)), var(--velo) 50% 20% / cover no-repeat;
+  filter: blur(20px) saturate(1.05);
+  transform: scale(1.12);
+}
+.retrato-velo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgb(255 255 255 / 0.32) 50%, transparent 70%);
+  transform: translateX(-100%);
+}
+.retrato[data-revelado] .retrato-velo {
+  opacity: 0;
+  visibility: hidden;
+}
+@keyframes retrato-brillo {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .retrato-velo::after { animation: retrato-brillo 2.4s cubic-bezier(0.45, 0, 0.55, 1) 0.7s infinite both; }
+  .retrato-imagen {
+    transform: scale(1.07);
+    transition: transform 2.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .retrato-linea {
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path 1.8s cubic-bezier(0.65, 0, 0.35, 1) 0.3s;
+  }
+  .retrato-pie {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 1s var(--ease-out-expo) 0.7s, transform 1s var(--ease-out-expo) 0.7s;
+  }
+  .retrato[data-revelado] :is(.retrato-imagen, .retrato-pie) { transform: none; opacity: 1; }
+  .retrato[data-revelado] .retrato-linea { clip-path: inset(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .retrato-velo { transition-duration: 0.5s, 0s; transition-delay: 0s, 0.5s; }
+}
+/* Sin JavaScript no hay aviso de carga: se muestra el retrato tal cual. */
+@media (scripting: none) {
+  .retrato-velo { display: none; }
+  .retrato-imagen, .retrato-pie { transform: none; opacity: 1; }
+  .retrato-linea { clip-path: none; }
+}
+
 @keyframes scroll-gota {
   0% { transform: translateY(-100%); opacity: 0; }
   30% { opacity: 1; }

@@ -14,7 +14,8 @@ Documento para quien mantenga el sitio. Explica qué hace cada archivo y por qu�
 | `components/three/petaloGeometria.ts` | La geometría procedural del pétalo (sí importa three.js; solo va en el chunk diferido). |
 | `components/three/FlowerCanvas.tsx` | El `<Canvas>` de React Three Fiber: luces, niebla, `dpr` y seguimiento del puntero. Monta `ScrollScenes`. |
 | `components/three/Flores.tsx` | Dibuja la guirnalda con tres `InstancedMesh` y la anima en `useFrame` leyendo `escena`. |
-| `components/home/Hero.tsx` | Hero. Su animación de entrada es CSS puro (clases `.entrada-*` en `globals.css`), sin JavaScript. |
+| `components/home/Hero.tsx` | Hero. La entrada del texto es CSS puro (clases `.entrada-*` en `globals.css`), sin JavaScript. |
+| `components/home/RetratoHero.tsx` | Retrato del hero: se revela cuando la foto ya cargó (clases `.retrato-*` en `globals.css`). |
 
 ## El flujo, paso a paso
 
@@ -34,7 +35,12 @@ Documento para quien mantenga el sitio. Explica qué hace cada archivo y por qu�
 - El scroll nunca provoca renders de React: `escena` es un objeto plano; nada pasa por `useState`.
 - Toda la escena son **tres draw calls**: un `InstancedMesh` con todos los pétalos (exteriores e interiores), otro con los centros y otro con los ocho puntos que rodean cada flor, como en el isotipo. Actualizar unas 200 matrices por fotograma cuesta décimas de milisegundo.
 - `dpr` máximo 1,5, sin sombras, sin postprocesado, sin texturas, materiales planos con colores por vértice para el sombreado.
-- La entrada del hero es CSS (`@keyframes` con `animation-delay` escalonado): arranca en el primer pintado, no espera a ningún script y se desactiva con `prefers-reduced-motion`. El titular solo se desplaza; la foto se revela con `clip-path` y escala. Ninguno de los dos pasa por opacidad 0, porque el navegador retrasaría el LCP hasta que fuesen visibles.
+- La entrada del texto del hero es CSS (`@keyframes` con `animation-delay` escalonado): arranca en el primer pintado, no espera a ningún script y se desactiva con `prefers-reduced-motion`. El titular solo se desplaza: no pasa por opacidad 0, porque el navegador retrasaría el LCP hasta que fuese visible.
+- El retrato no se anima por tiempo sino cuando la foto está lista, para que nunca se vea a medio cargar ni recortada:
+  1. Desde el primer pintado el arco tiene su forma final y lo llena la versión borrosa de la foto (`blurDataURL`); si la descarga tarda, un brillo lento lo recorre.
+  2. Cuando la imagen está descargada y decodificada y el arco está en pantalla, la figura recibe `data-revelado`: el velo borroso se disuelve sobre la foto nítida mientras las dos se asientan (escala 1,07 → 1, como un enfoque), la línea del arco se dibuja de abajo arriba y aparece el pie.
+  3. En la primera visita lo marca un script en línea mínimo, para no esperar al JavaScript de la página; en la navegación interna lo marca React (`onLoad` de `next/image` e `IntersectionObserver`).
+  4. La `<img>` nunca usa opacidad (sigue contando para el LCP). Con `prefers-reduced-motion` solo queda un fundido corto; sin JavaScript se ve la foto directamente.
 - `petalo.ts` no importa three.js; la geometría vive en `petaloGeometria.ts`, que solo carga el chunk diferido. Así el fondo 2D no arrastra three.js al bundle inicial.
 
 ## Presupuesto
