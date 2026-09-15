@@ -7,8 +7,11 @@ import { PRODUCTOS } from "./data/productos";
  * - En producción (con las variables KEYSTATIC_GITHUB_CLIENT_ID, KEYSTATIC_GITHUB_CLIENT_SECRET y
  *   KEYSTATIC_SECRET definidas en Coolify) guarda en GitHub y cada artículo dispara un despliegue.
  */
-// GitHub solo cuando existen las credenciales de la GitHub App (en Coolify); si no, local.
-const enGitHub = Boolean(process.env.KEYSTATIC_GITHUB_CLIENT_ID);
+// GitHub solo cuando existe la GitHub App. Se mira la variable pública del slug y no el
+// CLIENT_ID porque esta condición también corre en el navegador, donde Next solo expone
+// las variables NEXT_PUBLIC_*: con el CLIENT_ID, el servidor quedaba en modo github y el
+// navegador en modo local, y el editor se quedaba en blanco pidiendo /api/keystatic/tree.
+const enGitHub = Boolean(process.env.NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG);
 
 export default config({
   storage: enGitHub
