@@ -53,7 +53,9 @@ export function RetratoHero() {
         data-revelado={(cargada && enVista) || undefined}
         // El script de abajo puede marcar data-revelado antes de que React hidrate.
         suppressHydrationWarning
-        className="retrato relative mx-auto w-full max-w-[24rem] sm:max-w-[26rem] lg:max-w-[min(28rem,calc((100svh-var(--alto-promo,0rem)-12.75rem)*0.75))] lg:justify-self-end"
+      // En escritorio ancho la foto sale hacia el margen derecho (hasta 6rem, siempre a 4rem o más del borde)
+      // para equilibrar el peso del titular a la izquierda.
+        className="retrato relative mx-auto w-full max-w-[24rem] sm:max-w-[26rem] lg:max-w-[min(28rem,calc((100svh-var(--alto-promo,0rem)-12.75rem)*0.75))] lg:-mr-[max(0rem,min(6rem,calc((100vw-var(--container-site))/2-2rem)))] lg:justify-self-end"
       >
         {/* Halo suave detrás del arco: une el retrato con el fondo */}
         <div
