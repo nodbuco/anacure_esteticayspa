@@ -234,7 +234,7 @@
    Antes de revelar: el arco ya tiene su forma y lo llena la foto borrosa; si la carga
    tarda, un brillo lento lo recorre. Al revelar (data-revelado): el velo se disuelve
    sobre la foto nítida mientras ambas se asientan (un enfoque, no un recorte), la línea
-   del arco se dibuja de abajo arriba y aparece el pie. */
+   del arco se dibuja de abajo arriba y aparecen el pie y el sello de trayectoria. */
 .retrato-velo {
   overflow: hidden;
   transition: opacity 1.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 1.4s;
@@ -277,7 +277,13 @@
     transform: translateY(12px);
     transition: opacity 1s var(--ease-out-expo) 0.7s, transform 1s var(--ease-out-expo) 0.7s;
   }
-  .retrato[data-revelado] :is(.retrato-imagen, .retrato-pie) { transform: none; opacity: 1; }
+  /* El sello de trayectoria llega el último, cuando la foto ya se asentó */
+  .retrato-sello {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 1.1s var(--ease-out-expo) 1.1s, transform 1.1s var(--ease-out-expo) 1.1s;
+  }
+  .retrato[data-revelado] :is(.retrato-imagen, .retrato-pie, .retrato-sello) { transform: none; opacity: 1; }
   .retrato[data-revelado] .retrato-linea { clip-path: inset(0); }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -286,7 +292,7 @@
 /* Sin JavaScript no hay aviso de carga: se muestra el retrato tal cual. */
 @media (scripting: none) {
   .retrato-velo { display: none; }
-  .retrato-imagen, .retrato-pie { transform: none; opacity: 1; }
+  .retrato-imagen, .retrato-pie, .retrato-sello { transform: none; opacity: 1; }
   .retrato-linea { clip-path: none; }
 }
 

@@ -68,6 +68,7 @@ export function RetratoHero() {
           aria-hidden="true"
           className="retrato-linea absolute -inset-3 rounded-t-full rounded-b-[3rem] border border-lila-300/80"
         />
+        <div className="relative">
         <div className="arco-foto relative aspect-[3/4]">
           <div className="retrato-imagen absolute inset-0">
             <Image
@@ -87,6 +88,22 @@ export function RetratoHero() {
               style={variables({ "--velo": `url(${heroFoto.blurDataURL})` })}
             />
           </div>
+        </div>
+        {/*
+          Sello de trayectoria: cristal sobre la zona donde la foto se funde con la página. En escritorio
+          asoma por el borde izquierdo del arco y une el retrato con la columna del texto.
+        */}
+        <p className="retrato-sello absolute bottom-[15%] left-3 flex items-center gap-3 rounded-2xl bg-blanco/60 py-2.5 pl-3.5 pr-4 shadow-soft ring-1 ring-inset ring-blanco/80 backdrop-blur-md lg:-left-10 lg:bottom-[19%]">
+          <span className="sr-only">Más de 10 años cuidando tu piel</span>
+          <span aria-hidden="true" className="font-display text-[1.65rem] leading-none text-purpura lg:text-[1.85rem]">
+            +10
+          </span>
+          <span aria-hidden="true" className="h-8 w-px bg-lila-300" />
+          <span aria-hidden="true" className="flex flex-col gap-0.5 leading-tight">
+            <span className="font-display text-[0.66rem] uppercase tracking-[0.22em] text-tinta">Años</span>
+            <span className="text-[0.8rem] text-gris">cuidando tu piel</span>
+          </span>
+        </p>
         </div>
         <figcaption className="retrato-pie mt-5 flex flex-col gap-1 px-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
           <span className="titular whitespace-nowrap text-[0.72rem] tracking-[0.22em] text-purpura">
