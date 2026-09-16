@@ -65,6 +65,23 @@ export function IconoCerrar(props: P) {
   );
 }
 
+export function IconoCorazon(props: P) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" {...props}>
+      <path d="M12 20.6s-7.4-4.5-9.3-9.1C1.3 8 3.5 4.4 7.1 4.4c2 0 3.6 1.1 4.9 2.9 1.3-1.8 2.9-2.9 4.9-2.9 3.6 0 5.8 3.6 4.4 7.1-1.9 4.6-9.3 9.1-9.3 9.1z" />
+    </svg>
+  );
+}
+
+export function IconoCopiar(props: P) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" {...trazo} {...props}>
+      <rect x="9" y="9" width="11" height="11" rx="2" />
+      <path d="M5 15V6a2 2 0 0 1 2-2h9" />
+    </svg>
+  );
+}
+
 export function IconoFlecha(props: P) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" {...trazo} {...props}>

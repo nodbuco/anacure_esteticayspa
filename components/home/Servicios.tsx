@@ -8,7 +8,7 @@ import { CATEGORIAS, serviciosDe } from "@/data/servicios";
 
 export function Servicios() {
   return (
-    <section id="servicios" data-scene="servicios" className="relative z-10 py-section">
+    <section id="servicios" data-scene="servicios" data-flores="suaves" className="relative z-10 py-section">
       <Container>
         <div className="revelar flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">

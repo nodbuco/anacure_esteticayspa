@@ -16,7 +16,8 @@ export type EventoAnalitica =
   | "cita_completada"
   | "formulario_contacto"
   | "vista_servicio"
-  | "sede_seleccionada";
+  | "sede_seleccionada"
+  | "cupon_copiado";
 
 export type PropsEvento = Record<string, string | number | boolean | undefined>;
 

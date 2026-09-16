@@ -8,7 +8,7 @@ import { HISTORIAS } from "@/data/home";
 export function Historias() {
   const [principal, ...resto] = HISTORIAS;
   return (
-    <section id="historias" data-scene="historias" className="relative z-10 py-section">
+    <section id="historias" data-scene="historias" data-flores="suaves" className="relative z-10 py-section">
       <Container>
         <div className="revelar max-w-2xl">
           <Eyebrow>Historias reales</Eyebrow>

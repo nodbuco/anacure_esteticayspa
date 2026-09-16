@@ -1,7 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { escena } from "@/lib/escenas";
 import { FlowerFallback } from "./FlowerFallback";
 
 const FlowerCanvas = dynamic(() => import("./FlowerCanvas"), { ssr: false });
@@ -54,6 +55,36 @@ const EVENTOS_INTERACCION = ["scroll", "wheel", "pointerdown", "touchstart", "ke
 export function FlowerField() {
   const [modo, setModo] = useState<Modo>("inicial");
   const [listo, setListo] = useState(false);
+  const raiz = useRef<HTMLDivElement>(null);
+
+  /*
+   * Enfoque del fondo. Las secciones con data-flores="suaves" (texto sobre las flores) las
+   * desenfocan; data-flores="nitidas" (el hero) las enfoca; las demás tapan el fondo y no
+   * cambian nada. Decide la sección que cruza la franja central de la pantalla. El atributo
+   * data-suave va directo al DOM para que el scroll no provoque renders de React.
+   */
+  useEffect(() => {
+    const el = raiz.current;
+    const secciones = document.querySelectorAll("[data-flores]");
+    if (!el || secciones.length === 0) return;
+    const observador = new IntersectionObserver(
+      (entradas) => {
+        for (const entrada of entradas) {
+          if (!entrada.isIntersecting) continue;
+          const suave = (entrada.target as HTMLElement).dataset.flores === "suaves";
+          el.toggleAttribute("data-suave", suave);
+          escena.suave = suave;
+        }
+      },
+      { rootMargin: "-45% 0px -45% 0px" },
+    );
+    secciones.forEach((s) => observador.observe(s));
+    return () => {
+      observador.disconnect();
+      el.removeAttribute("data-suave");
+      escena.suave = false;
+    };
+  }, []);
 
   useEffect(() => {
     let cancelado = false;
@@ -92,21 +123,24 @@ export function FlowerField() {
   }, []);
 
   return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0" data-fondo={modo}>
+    <div ref={raiz} aria-hidden="true" className="pointer-events-none fixed inset-0 z-0" data-fondo={modo}>
       {/* Aurora: dos veladuras de color muy suaves que dan profundidad al fondo */}
       <div className="absolute inset-0 bg-[radial-gradient(60%_50%_at_82%_30%,rgb(235_221_243/0.75),transparent_70%),radial-gradient(45%_40%_at_10%_95%,rgb(212_228_229/0.7),transparent_70%)]" />
-      <FlowerFallback oculto={listo} />
-      {modo === "3d" && (
-        <div className="absolute inset-0 transition-opacity duration-1000 ease-luxe" style={{ opacity: listo ? 1 : 0 }}>
-          <FlowerCanvas
-            alListo={() => setListo(true)}
-            alPerder={() => {
-              setListo(false);
-              setModo("2d");
-            }}
-          />
-        </div>
-      )}
+      {/* Las flores (2D y 3D) en una capa propia: es la que se desenfoca (.capa-flores en globals.css) */}
+      <div className="capa-flores absolute inset-0">
+        <FlowerFallback oculto={listo} />
+        {modo === "3d" && (
+          <div className="absolute inset-0 transition-opacity duration-1000 ease-luxe" style={{ opacity: listo ? 1 : 0 }}>
+            <FlowerCanvas
+              alListo={() => setListo(true)}
+              alPerder={() => {
+                setListo(false);
+                setModo("2d");
+              }}
+            />
+          </div>
+        )}
+      </div>
       {/* Veladura para que el texto del hero siga legible sobre las flores */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_35%,rgb(250_247_252/0.85)_0%,rgb(250_247_252/0.35)_38%,transparent_62%)] lg:bg-[radial-gradient(ellipse_at_15%_45%,rgb(250_247_252/0.9)_0%,rgb(250_247_252/0.4)_30%,transparent_55%)]" />
     </div>

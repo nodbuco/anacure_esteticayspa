@@ -11,27 +11,31 @@ const retraso = (s: number) => ({ "--retraso": `${s}s` }) as React.CSSProperties
  * JavaScript, y respeta prefers-reduced-motion. El titular solo se desplaza (nunca
  * opacidad 0) porque es el elemento LCP. La foto (RetratoHero) va en un arco que se funde
  * con la página por abajo y se revela cuando la imagen ya cargó, nunca a medio pintar.
+ * Con la barra de promoción visible, el alto y el margen inferior descuentan --alto-promo:
+ * el hero sigue ocupando la misma primera pantalla que sin barra. En portátiles de poca altura
+ * (variante pantalla-baja) aprieta márgenes y titular para que los botones sigan a la vista.
  */
 export function Hero() {
   return (
     <section
       data-scene="hero"
+      data-flores="nitidas"
       aria-labelledby="hero-titulo"
-      className="relative z-10 flex min-h-[calc(100svh-4.5rem)] items-center overflow-hidden lg:min-h-[min(calc(100svh-5rem),54rem)]"
+      className="relative z-10 flex min-h-[calc(100svh-4.5rem-var(--alto-promo,0rem))] items-center overflow-hidden lg:min-h-[min(calc(100svh-5rem-var(--alto-promo,0rem)),54rem)]"
     >
-      <Container className="grid w-full items-center gap-12 py-12 sm:py-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10 lg:pb-24 lg:pt-6">
+      <Container className="grid w-full items-center gap-12 py-12 sm:py-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10 lg:pb-[calc(6rem-var(--alto-promo,0rem))] lg:pt-6">
         <div className="max-w-2xl">
           <p className="entrada-aparecer titular flex items-center gap-4 text-eyebrow text-verde" style={retraso(0.05)}>
             <span aria-hidden="true" className="h-px w-10 bg-verde/70" />
             Estética avanzada &amp; spa
           </p>
-          <h1 id="hero-titulo" className="entrada-subir titular mt-6 text-display-xl text-tinta">
+          <h1 id="hero-titulo" className="entrada-subir titular mt-6 text-display-xl text-tinta pantalla-baja:mt-4 pantalla-baja:text-[length:min(var(--text-display-xl),9.4svh)]">
             Donde el cuidado se convierte en <span className="text-purpura">experiencia</span>
           </h1>
-          <p className="entrada-aparecer prosa mt-7 text-lead text-gris" style={retraso(0.25)}>
+          <p className="entrada-aparecer prosa mt-7 text-lead text-gris pantalla-baja:mt-5" style={retraso(0.25)}>
             Medicina estética de última generación y un spa hecho para volver a ti, en El Banco y en Aguachica.
           </p>
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center pantalla-baja:mt-7">
             <div className="entrada-aparecer" style={retraso(0.4)}>
               <AgendarButton ubicacion="hero" tamano="lg" className="w-full sm:w-auto" />
             </div>
@@ -39,7 +43,7 @@ export function Hero() {
               <WhatsAppButton ubicacion="hero" tamano="lg" className="w-full sm:w-auto" />
             </div>
           </div>
-          <p className="entrada-aparecer mt-6 inline-flex items-center gap-2 text-sm text-tinta-suave" style={retraso(0.65)}>
+          <p className="entrada-aparecer mt-6 inline-flex items-center gap-2 text-sm text-tinta-suave pantalla-baja:mt-4" style={retraso(0.65)}>
             <IconoCheck className="size-4 text-verde" />
             Tu primera cita es una valoración sin costo, presencial o virtual.
           </p>

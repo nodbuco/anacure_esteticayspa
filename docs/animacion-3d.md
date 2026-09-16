@@ -41,6 +41,11 @@ Documento para quien mantenga el sitio. Explica qué hace cada archivo y por qu�
   2. Cuando la imagen está descargada y decodificada y el arco está en pantalla, la figura recibe `data-revelado`: el velo borroso se disuelve sobre la foto nítida mientras las dos se asientan (escala 1,07 → 1, como un enfoque), la línea del arco se dibuja de abajo arriba y aparece el pie.
   3. En la primera visita lo marca un script en línea mínimo, para no esperar al JavaScript de la página; en la navegación interna lo marca React (`onLoad` de `next/image` e `IntersectionObserver`).
   4. La `<img>` nunca usa opacidad (sigue contando para el LCP). Con `prefers-reduced-motion` solo queda un fundido corto; sin JavaScript se ve la foto directamente.
+- Enfoque del fondo: detrás de las secciones de texto las flores se desenfocan para que el texto se lea limpio.
+  1. Cada sección declara `data-flores="suaves"` (texto sobre las flores: insignias, servicios, historias, sedes) o `data-flores="nitidas"` (el hero). Las de fondo opaco no declaran nada y no cambian el estado.
+  2. `FlowerField` observa con un `IntersectionObserver` la franja central de la pantalla y pone `data-suave` en el fondo; `.capa-flores` (2D y 3D) pasa a `blur(7px)` y opacidad 0,6 en 0,9 s (4 px y 0,55 en móvil).
+  3. En 3D también se escribe `escena.suave`: pasado el fundido, `Flores` baja el canvas a `dpr` 0,75 (la imagen desenfocada no necesita nitidez y la GPU dibuja y desenfoca menos píxeles). Al volver al hero recupera `DPR_NORMAL` en el mismo fotograma, antes de dibujar, sin parpadeo.
+- El botón flotante de WhatsApp se aparta (se desvanece) mientras pasa por su esquina un elemento con `data-evita-flotante`, como el retrato del hero. Solo vigila esa esquina, así que en pantallas grandes, donde no hay choque, sigue a la vista.
 - `petalo.ts` no importa three.js; la geometría vive en `petaloGeometria.ts`, que solo carga el chunk diferido. Así el fondo 2D no arrastra three.js al bundle inicial.
 
 ## Presupuesto

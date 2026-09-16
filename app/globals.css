@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Escritorio de poca altura (portátiles 1366×768, 1280×720): el hero aprieta su ritmo vertical */
+@custom-variant pantalla-baja (@media (min-width: 64rem) and (max-height: 50rem));
+
 /*
   Sistema de diseño · Ana Cure Estética & Spa
   ------------------------------------------------------------
@@ -294,6 +297,51 @@
 }
 @media (prefers-reduced-motion: no-preference) {
   .scroll-gota { animation: scroll-gota 2.2s cubic-bezier(0.45, 0, 0.55, 1) infinite; }
+}
+
+/* ---------- Fondo de flores: desenfocado detrás del texto (FlowerField) ----------
+   Las secciones con data-flores="suaves" ponen data-suave en el fondo: las flores pierden
+   foco y fuerza para que el texto se lea limpio; en el hero vuelven a estar nítidas. */
+.capa-flores {
+  transition: filter 0.9s var(--ease-luxe), opacity 0.9s var(--ease-luxe);
+}
+[data-suave] > .capa-flores {
+  filter: blur(7px);
+  opacity: 0.6;
+}
+@media (max-width: 47.99rem) {
+  [data-suave] > .capa-flores {
+    filter: blur(4px);
+    opacity: 0.55;
+  }
+}
+
+/* ---------- Barra de promoción (BarraPromo) ----------
+   --alto-promo: alto de la barra mientras existe; el hero lo descuenta. Debe coincidir con
+   h-12 / sm:h-11 del componente. */
+:root:has(#barra-promo) {
+  --alto-promo: 3rem;
+}
+@media (min-width: 40rem) {
+  :root:has(#barra-promo) {
+    --alto-promo: 2.75rem;
+  }
+}
+/* Un brillo lento cruza la barra cada 9 s */
+.barra-promo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / 0.14) 50%, transparent 65%);
+  transform: translateX(-100%);
+}
+@keyframes barra-brillo {
+  0%, 78% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .barra-promo::after { animation: barra-brillo 9s cubic-bezier(0.45, 0, 0.55, 1) 2s infinite; }
 }
 
 /* ---------- Floración del fondo 2D al cargar ---------- */

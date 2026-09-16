@@ -67,12 +67,16 @@ const mira = new THREE.Vector3();
 const local = new THREE.Vector3();
 const suavizar = (a: number, b: number, t: number) => a + (b - a) * t * t * (3 - 2 * t);
 
+/** Resolución del canvas: normal (máximo 1,5) y con las flores desenfocadas detrás del texto. */
+export const DPR_NORMAL: [number, number] = [1, 1.5];
+const DPR_DESENFOCADO = 0.75;
+
 export function Flores() {
   const { viewport, size, camera, invalidate } = useThree();
   const petalosRef = useRef<THREE.InstancedMesh>(null);
   const centrosRef = useRef<THREE.InstancedMesh>(null);
   const puntosRef = useRef<THREE.InstancedMesh>(null);
-  const suave = useRef({ p: 0, px: 0, py: 0, t0: -1, escritas: false });
+  const suave = useRef({ p: 0, px: 0, py: 0, t0: -1, escritas: false, eraSuave: false, desdeSuave: 0, dprBajo: false });
 
   const movil = size.width < 768;
   const flores = useMemo(() => construir(viewport.width, viewport.height, movil), [viewport.width, viewport.height, movil]);
@@ -145,6 +149,18 @@ export function Flores() {
 
     const t = state.clock.elapsedTime;
     const dt = Math.min(delta, 0.05);
+    // Desenfocadas no necesitan nitidez: pasado el fundido del desenfoque (0,9 s) se dibujan a
+    // menos resolución, y recuperan la normal en cuanto vuelven a enfocarse. setDpr redimensiona
+    // el canvas aquí, antes de dibujar este mismo fotograma, así que no hay parpadeo.
+    if (escena.suave !== s.eraSuave) {
+      s.eraSuave = escena.suave;
+      s.desdeSuave = t;
+    }
+    const dprBajo = s.eraSuave && t - s.desdeSuave > 1;
+    if (dprBajo !== s.dprBajo) {
+      s.dprBajo = dprBajo;
+      state.setDpr(dprBajo ? DPR_DESENFOCADO : DPR_NORMAL);
+    }
     const objetivo = Number.isFinite(escena.global) ? THREE.MathUtils.clamp(escena.global, 0, 1) : s.p;
     if (s.t0 < 0) {
       // Primer fotograma: la cámara arranca donde está el scroll, sin barrido.

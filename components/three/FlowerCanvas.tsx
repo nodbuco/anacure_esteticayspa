@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { ScrollScenes } from "@/components/motion/ScrollScenes";
 import { escena } from "@/lib/escenas";
-import { Flores } from "./Flores";
+import { DPR_NORMAL, Flores } from "./Flores";
 import { COLORES } from "./petalo";
 
 /**
@@ -32,7 +32,7 @@ export default function FlowerCanvas({ alListo, alPerder }: { alListo?: () => vo
       {/* GSAP y ScrollTrigger viajan en este mismo chunk diferido: solo existen si hay 3D. */}
       <ScrollScenes />
       <Canvas
-      dpr={[1, 1.5]}
+      dpr={DPR_NORMAL}
       flat
       frameloop="always"
       camera={{ position: [0, 0, 10], fov: 38, near: 0.1, far: 40 }}

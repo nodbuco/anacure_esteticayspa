@@ -18,6 +18,8 @@ export interface EstadoEscena {
   puntero: { x: number; y: number };
   /** false cuando el canvas no aporta nada (pie de página visible) */
   activo: boolean;
+  /** true mientras las flores van desenfocadas detrás de una sección de texto (FlowerField) */
+  suave: boolean;
   /** Lo registra el canvas: pide un fotograma cuando está en modo «demand» */
   invalidar?: () => void;
   /** Marca de tiempo (performance.now) del último «pulso»: las flores florecen un instante */
@@ -31,4 +33,5 @@ export const escena: EstadoEscena = {
   total: 1,
   puntero: { x: 0, y: 0 },
   activo: true,
+  suave: false,
 };

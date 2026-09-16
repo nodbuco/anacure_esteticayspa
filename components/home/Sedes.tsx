@@ -15,7 +15,7 @@ const FOTOS: Record<string, { src: string; alt: string }> = {
 
 export function Sedes() {
   return (
-    <section id="sedes" data-scene="sedes" className="relative z-10 py-section">
+    <section id="sedes" data-scene="sedes" data-flores="suaves" className="relative z-10 py-section">
       <Container>
         <div className="revelar max-w-2xl">
           <Eyebrow>Sedes</Eyebrow>

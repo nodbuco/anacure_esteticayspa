@@ -58,6 +58,19 @@ Las fotos están en `public/media/`. Para cambiar una, reemplaza el archivo **co
 
 Formato JPG, calidad 80–85, menos de 600 KB. El sitio genera solo las versiones AVIF/WebP y los tamaños.
 
+### Promoción de la barra superior
+
+La franja morada bajo la cabecera anuncia la promoción del mes, con el cupón (se copia con un toque) y
+una cuenta regresiva de días y horas. Todo se cambia en `data/promociones.ts`:
+
+- `ocasion`, `descuento`, `tratamiento` y `cupon`: los textos que se ven.
+- `termina`: fecha y hora de cierre, con la zona de Colombia (`2026-10-01T00:00:00-05:00` = fin de septiembre).
+  A esa hora la barra desaparece sola.
+- `activa: false`: la quita antes de tiempo.
+
+Tras cambiar el archivo hay que desplegar. La barra no es fija: se va con el scroll. Mientras existe,
+el hero del inicio descuenta su alto para seguir ocupando la primera pantalla igual que sin ella.
+
 ### La agenda
 
 - El equipo ve y gestiona las citas en el panel de Easy!Appointments:
@@ -137,6 +150,7 @@ cargado, y si no, no hace nada.
 | `vista_servicio` | se abre la página de un tratamiento | `servicio`, `categoria` |
 | `cita_completada` | la cita quedó creada en Easy!Appointments | `sede`, `servicio` |
 | `formulario_contacto` | envío del formulario «Escríbenos» de una sede | `sede`, `ubicacion` |
+| `cupon_copiado` | se copia el cupón de la barra de promoción | `promocion`, `cupon` |
 
 **Activar Plausible:** poner `NEXT_PUBLIC_PLAUSIBLE_HOST=https://plausible.nodbu.com` (y el dominio en
 `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`) y volver a desplegar. `components/analytics/PlausibleScript.tsx` solo

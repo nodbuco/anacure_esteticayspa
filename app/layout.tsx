@@ -3,10 +3,12 @@ import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import { PlausibleScript } from "@/components/analytics/PlausibleScript";
 import { FloatingWhatsApp } from "@/components/cta/FloatingWhatsApp";
+import { BarraPromo } from "@/components/layout/BarraPromo";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { SedeProvider } from "@/components/sede/SedeProvider";
 import { menuServicios } from "@/data/servicios";
+import { promocionVigente } from "@/data/promociones";
 import { SITE } from "@/data/site";
 import { jsonLdOrganizacion, jsonLdSeguro } from "@/lib/seo";
 import "./globals.css";
@@ -62,11 +64,13 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  const promo = promocionVigente();
   return (
     <html lang="es-CO" data-scroll-behavior="smooth" className={`${cinzel.variable} ${inter.variable} h-full`}>
       <body className="flex min-h-full flex-col">
         <SedeProvider>
           <Header servicios={menuServicios()} />
+          {promo && <BarraPromo promo={promo} />}
           <div id="contenido" className="flex-1">
             {children}
           </div>

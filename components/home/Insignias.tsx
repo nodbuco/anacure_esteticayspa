@@ -11,7 +11,7 @@ import { AntesDespues } from "./AntesDespues";
 
 export function Insignias() {
   return (
-    <section id="insignias" data-scene="insignias" className="relative z-10 py-section">
+    <section id="insignias" data-scene="insignias" data-flores="suaves" className="relative z-10 py-section">
       <Container>
         <div className="revelar max-w-2xl">
           <Eyebrow>En qué somos mejores</Eyebrow>
