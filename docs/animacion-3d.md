@@ -45,7 +45,10 @@ Documento para quien mantenga el sitio. Explica qué hace cada archivo y por qu�
   1. Cada sección declara `data-flores="suaves"` (texto sobre las flores: insignias, servicios, historias, sedes) o `data-flores="nitidas"` (el hero). Las de fondo opaco no declaran nada y no cambian el estado.
   2. `FlowerField` observa con un `IntersectionObserver` la franja central de la pantalla y pone `data-suave` en el fondo; `.capa-flores` (2D y 3D) pasa a `blur(7px)` y opacidad 0,6 en 0,9 s (4 px y 0,55 en móvil).
   3. En 3D también se escribe `escena.suave`: pasado el fundido, `Flores` baja el canvas a `dpr` 0,75 (la imagen desenfocada no necesita nitidez y la GPU dibuja y desenfoca menos píxeles). Al volver al hero recupera `DPR_NORMAL` en el mismo fotograma, antes de dibujar, sin parpadeo.
-- El botón flotante de WhatsApp se aparta (se desvanece) mientras pasa por su esquina un elemento con `data-evita-flotante`, como el retrato del hero. Solo vigila esa esquina, así que en pantallas grandes, donde no hay choque, sigue a la vista.
+- El botón flotante de WhatsApp se aparta (se desvanece) de los elementos con `data-evita-flotante`:
+  1. Por defecto, mientras el elemento pasa por la esquina del botón, con 32 px de aire. En pantallas grandes, donde no hay choque, sigue a la vista; en escritorio es un punto más compacto y va más al borde.
+  2. El retrato del hero usa `data-evita-flotante="hasta-pasar"`: con el hero en una columna (menos de 1024 px) el botón espera a que la foto termine de pasar por encima, porque al entrar ya está el botón de WhatsApp del hero. Un `IntersectionObserver` con la franja desde el botón hasta muy por debajo de la pantalla detecta también los saltos directos al inicio.
+- Hero en escritorio: la columna de texto es lo bastante ancha (`1.18fr` / `0.82fr`) para que el titular ocupe cuatro renglones. En portátiles de poca altura (`pantalla-baja`, 800 px o menos) se aprietan márgenes y titular (9svh) y la foto se ajusta a la altura; por debajo de 736 px se oculta la guía «Descubre». Así la nota de la valoración entra en la primera pantalla desde ventanas de unos 600 px de alto.
 - `petalo.ts` no importa three.js; la geometría vive en `petaloGeometria.ts`, que solo carga el chunk diferido. Así el fondo 2D no arrastra three.js al bundle inicial.
 
 ## Presupuesto

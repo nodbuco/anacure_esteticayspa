@@ -47,12 +47,13 @@ export function RetratoHero() {
       <figure
         ref={figura}
         id="retrato-hero"
-      // El botón flotante de WhatsApp se aparta mientras pasa por encima del retrato.
-      data-evita-flotante
+      // El botón flotante de WhatsApp se aparta mientras pasa por encima del retrato y, con el hero en
+      // una columna, espera a que termine de pasar (arriba ya está el botón de WhatsApp del hero).
+      data-evita-flotante="hasta-pasar"
         data-revelado={(cargada && enVista) || undefined}
         // El script de abajo puede marcar data-revelado antes de que React hidrate.
         suppressHydrationWarning
-        className="retrato relative mx-auto w-full max-w-[24rem] sm:max-w-[26rem] lg:max-w-[min(28rem,calc((100svh-var(--alto-promo,0rem)-10.5rem)*0.75))] lg:justify-self-end"
+        className="retrato relative mx-auto w-full max-w-[24rem] sm:max-w-[26rem] lg:max-w-[min(28rem,calc((100svh-var(--alto-promo,0rem)-12.75rem)*0.75))] lg:justify-self-end"
       >
         {/* Halo suave detrás del arco: une el retrato con el fondo */}
         <div
